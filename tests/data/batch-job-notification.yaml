@@ -1,0 +1,32 @@
+# from https://docs.aws.amazon.com/step-functions/latest/dg/batch-job-notification.html
+Comment: An example of the Amazon States Language for notification on an AWS Batch
+  job completion
+StartAt: Submit Batch Job
+States:
+  Notify Failure:
+    End: true
+    Parameters:
+      Message: Batch job submitted through Step Functions failed
+      TopicArn: arn:aws:sns:us-east-1:123456789012:batchjobnotificatiointemplate-SNSTopic-1J757CVBQ2KHM
+    Resource: arn:aws:states:::sns:publish
+    Type: Task
+  Notify Success:
+    End: true
+    Parameters:
+      Message: Batch job submitted through Step Functions succeeded
+      TopicArn: arn:aws:sns:us-east-1:123456789012:batchjobnotificatiointemplate-SNSTopic-1J757CVBQ2KHM
+    Resource: arn:aws:states:::sns:publish
+    Type: Task
+  Submit Batch Job:
+    Catch:
+    - ErrorEquals:
+      - States.ALL
+      Next: Notify Failure
+    Next: Notify Success
+    Parameters:
+      JobDefinition: arn:aws:batch:us-east-1:123456789012:job-definition/BatchJobDefinition-74d55ec34c4643c:1
+      JobName: BatchJobNotification
+      JobQueue: arn:aws:batch:us-east-1:123456789012:job-queue/BatchJobQueue-7049d367474b4dd
+    Resource: arn:aws:states:::batch:submitJob.sync
+    Type: Task
+TimeoutSeconds: 3600
