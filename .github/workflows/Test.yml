@@ -16,16 +16,16 @@ jobs:
         include:
           - os: ubuntu-latest
             python: 3.6
-            lint: false
+            type: test-only
           - os: ubuntu-latest
             python: 3.9
-            lint: true
+            type: all
           - os: windows-latest
             python: 3.6
-            lint: false
+            type: test-only
           - os: windows-latest
             python: 3.9
-            lint: false
+            type: test-only
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
 
@@ -44,9 +44,21 @@ jobs:
           python -m pip install -r requirements/test.txt
 
       - name: Lint
-        if: ${{ matrix.lint }}
+        if: ${{ matrix.type == 'all' }}
         uses: pre-commit/action@v2.0.3
 
       - name: Run test suite
+        if: ${{ matrix.type != 'all' }}
         run: |
           pytest tests
+
+      - name: Run test suite
+        if: ${{ matrix.type == 'all' }}
+        run: |
+          pytest --cov-report xml --cov=statelint tests
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: coverage.xml

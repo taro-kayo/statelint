@@ -1,4 +1,9 @@
 # statelint
+<a href="https://github.com/taro-kayo/statelint/actions"><img alt="Actions Status" src="https://github.com/taro-kayo/statelint/workflows/Test/badge.svg"></a>
+<a href="https://coveralls.io/github/taro-kayo/statelint?branch=main"><img alt="Coverage Status" src="https://coveralls.io/repos/github/taro-kayo/statelint/badge.svg?branch=main"></a>
+<a href="https://github.com/taro-kayo/statelint/blob/main/LICENSE"><img alt="License: Apache License 2.0" src="https://img.shields.io/badge/License-Apache_2.0-blue.svg"></a>
+<a href="https://pypi.org/project/statelint/"><img alt="PyPI" src="https://img.shields.io/pypi/v/statelint"></a>
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
 An PyPI package providing a validator for [Amazon States Language](https://states-language.net/spec.html) JSON/YAML files.
 
