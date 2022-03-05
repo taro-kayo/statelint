@@ -1,7 +1,12 @@
 - id: statelint
   name: statelint
-  description: "`statelint` provides a validator for Amazon States Language."
   entry: statelint
   language: python
   types: [json]
+  require_serial: true
+- id: statelint-yaml
+  name: statelint (YAML)
+  entry: statelint --yaml
+  language: python
+  types: [yaml]
   require_serial: true
