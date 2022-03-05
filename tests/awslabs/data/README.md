@@ -1,0 +1,1 @@
+All files in this directory are from [https://github.com/awslabs/statelint/tree/master/test].
