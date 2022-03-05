@@ -1,4 +1,4 @@
-name: pytest
+name: Test
 on:
   pull_request:
   push:
@@ -52,13 +52,11 @@ jobs:
         run: |
           pytest tests
 
-      - name: Run test suite
+      - name: Coveralls
         if: ${{ matrix.type == 'all' }}
         run: |
-          pytest --cov-report xml --cov=statelint tests
-
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: coverage.xml
+          pip install coveralls
+          coverage run --source=statelint -m pytest tests
+          coveralls --service=github
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
