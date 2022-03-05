@@ -1,7 +1,5 @@
 #! /usr/bin/env python
 import json
-import os
-import subprocess
 import sys
 from ast import literal_eval
 from subprocess import Popen

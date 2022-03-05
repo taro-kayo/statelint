@@ -1,6 +1,7 @@
 import os.path
 
 import pytest
+
 from statelint.linter import Linter
 
 

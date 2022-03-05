@@ -2,9 +2,9 @@ from typing import Any, List
 
 from dateutil import parser
 
+from ..problem import ProblemPredicate
 from .base import Field, NonNullMixin
 from .common import to_json
-from ..problem import ProblemPredicate
 
 
 class TimestampField(NonNullMixin, Field):

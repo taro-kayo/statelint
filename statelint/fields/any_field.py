@@ -1,7 +1,7 @@
 from typing import Any, List
 
-from .base import Field
 from ..problem import ProblemPredicate
+from .base import Field
 
 
 class AnyField(Field):

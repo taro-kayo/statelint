@@ -1,4 +1,5 @@
 import pytest
+
 from statelint.linter import Linter
 
 
