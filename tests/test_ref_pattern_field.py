@@ -1,4 +1,5 @@
 import pytest
+
 from statelint.fields.pattern_field import JsonPathField, RefPathField
 
 

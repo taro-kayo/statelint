@@ -1,6 +1,7 @@
 from unittest.mock import Mock
 
 import pytest
+
 from statelint.linter import Linter
 from statelint.nodes.state_machine import StateMachine
 

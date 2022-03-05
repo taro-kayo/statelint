@@ -4,6 +4,7 @@ from unittest import mock
 from unittest.mock import call
 
 import pytest
+
 from statelint.cli import main
 
 

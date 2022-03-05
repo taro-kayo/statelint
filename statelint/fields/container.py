@@ -1,10 +1,10 @@
 from collections import OrderedDict
 from typing import List, Set
 
+from ..problem import ProblemPredicate
 from .any_field import AnyField
 from .base import Field
 from .common import to_json
-from ..problem import ProblemPredicate
 
 
 class OneOfField(AnyField):
