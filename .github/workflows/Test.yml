@@ -1,4 +1,4 @@
-name: pytest
+name: Test
 on:
   pull_request:
   push:
@@ -16,16 +16,16 @@ jobs:
         include:
           - os: ubuntu-latest
             python: 3.6
-            lint: false
+            type: test-only
           - os: ubuntu-latest
             python: 3.9
-            lint: true
+            type: all
           - os: windows-latest
             python: 3.6
-            lint: false
+            type: test-only
           - os: windows-latest
             python: 3.9
-            lint: false
+            type: test-only
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
 
@@ -44,9 +44,19 @@ jobs:
           python -m pip install -r requirements/test.txt
 
       - name: Lint
-        if: ${{ matrix.lint }}
+        if: ${{ matrix.type == 'all' }}
         uses: pre-commit/action@v2.0.3
 
       - name: Run test suite
+        if: ${{ matrix.type != 'all' }}
         run: |
           pytest tests
+
+      - name: Coveralls
+        if: ${{ matrix.type == 'all' }}
+        run: |
+          pip install coveralls
+          coverage run --source=statelint -m pytest tests
+          coveralls --service=github
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
