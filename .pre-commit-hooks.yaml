@@ -1,0 +1,7 @@
+- id: statelint
+  name: statelint
+  description: "`statelint` provides a validator for Amazon States Language."
+  entry: statelint
+  language: python
+  types: [json]
+  require_serial: true
