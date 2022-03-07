@@ -21,9 +21,6 @@ jobs:
             python: 3.9
             type: all
           - os: windows-latest
-            python: 3.6
-            type: test-only
-          - os: windows-latest
             python: 3.9
             type: test-only
     runs-on: ${{ matrix.os }}
