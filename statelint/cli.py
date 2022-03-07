@@ -2,7 +2,7 @@ import importlib
 import platform
 import sys
 from argparse import ArgumentParser
-from typing import Optional, Sequence, Set
+from typing import Iterable, List, Optional, Sequence, Set, Tuple
 
 from . import __version__
 from .config import Config
@@ -24,19 +24,33 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print("Missing optional dependency 'PyYAML'.", file=sys.stderr)
         return 2
 
-    problems = Linter.validate(args.filepath_or_json_text, config)
+    all_problems = dict(_get_problems(args.filepath_or_text, config))
 
-    if not problems:
+    if not all_problems:
         return 0
 
-    problems_count = len(problems)
-    header = "One error" if problems_count == 1 else f"{problems_count} errors"
-    print(f"{header}:")
+    printing_input = len(all_problems) > 1
+    for key, problems in all_problems.items():
+        if printing_input:
+            print(key)
 
-    for problem in problems:
-        print(f" {problem}")
+        problems_count = len(problems)
+        header = "One error" if problems_count == 1 else f"{problems_count} errors"
+        print(f"{header}:")
+
+        for problem in problems:
+            print(f" {problem}")
 
     return 1
+
+
+def _get_problems(
+    input_list: List[str], config: Config
+) -> Iterable[Tuple[str, List[str]]]:
+    for filepath_or_text in input_list:
+        problems = Linter.validate(filepath_or_text, config)
+        if problems:
+            yield filepath_or_text, problems
 
 
 def _is_pyyaml_installed() -> bool:
@@ -50,7 +64,8 @@ def _is_pyyaml_installed() -> bool:
 def _make_arg_parser() -> ArgumentParser:
     parser = ArgumentParser()
     parser.add_argument(
-        "filepath_or_json_text",
+        "filepath_or_text",
+        nargs="+",
         help="ASL file path or ASL JSON/YAML text.",
     )
 

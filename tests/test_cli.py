@@ -1,3 +1,4 @@
+import itertools
 import json
 import os.path
 from unittest import mock
@@ -108,3 +109,21 @@ def test_default_argv(mocked_print):
         call(' State Machine does not have required field "States"'),
         call(' State Machine does not have required field "StartAt"'),
     ]
+
+
+@mock.patch("builtins.print")
+def test_multiple_input(mocked_print):
+    args = ['{"Comment":"1"}', "{}"]
+    assert main(args) == 1
+
+    assert mocked_print.mock_calls == list(
+        itertools.chain.from_iterable(
+            [
+                call(arg),
+                call("2 errors:"),
+                call(' State Machine does not have required field "States"'),
+                call(' State Machine does not have required field "StartAt"'),
+            ]
+            for arg in args
+        )
+    )
