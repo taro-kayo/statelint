@@ -29,7 +29,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if not all_problems:
         return 0
 
-    printing_input = len(all_problems) > 1
+    printing_input = len(args.filepath_or_text) > 1
     for key, problems in all_problems.items():
         if printing_input:
             print(key)
