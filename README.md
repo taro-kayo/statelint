@@ -5,7 +5,7 @@
 <a href="https://pypi.org/project/statelint/"><img alt="PyPI" src="https://img.shields.io/pypi/v/statelint"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
-An PyPI package providing a validator for [Amazon States Language](https://states-language.net/spec.html) JSON/YAML files.
+A PyPI package providing a validator for [Amazon States Language](https://states-language.net/spec.html) JSON/YAML files.
 
 This package is based on Amazon Web Services Labs' [awslabs/statelint](https://github.com/awslabs/statelint).
 
