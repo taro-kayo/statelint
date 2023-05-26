@@ -1,4 +1,4 @@
-from typing import Set
+from typing import Optional, Set
 
 from .problem import ProblemType
 
@@ -12,7 +12,9 @@ class Config:
         return "YAML" if self.is_yaml else "JSON"
 
     def __init__(
-        self, ignored_problem_types: Set[ProblemType] = None, yaml: bool = False
+        self,
+        ignored_problem_types: Optional[Set[ProblemType]] = None,
+        yaml: bool = False,
     ):
         self.ignored_problem_types = ignored_problem_types or set()
         self.is_yaml = yaml

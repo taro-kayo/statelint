@@ -1,6 +1,6 @@
 import json
 import os.path
-from typing import Any, Callable, Dict, List, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 
 from .config import Config
 from .nodes.factory.factory import StateFactory
@@ -16,7 +16,8 @@ class ParseError(ValueError):
 class Linter:
     @staticmethod
     def validate(
-        json_str_or_dict_or_file_path: Union[str, Dict[str, Any]], config: Config = None
+        json_str_or_dict_or_file_path: Union[str, Dict[str, Any]],
+        config: Optional[Config] = None,
     ) -> List[str]:
         if not config:
             config = Config()
