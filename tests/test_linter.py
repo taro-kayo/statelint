@@ -1,3 +1,5 @@
+import pytest
+
 from statelint.linter import Linter
 
 from .common import get_path
@@ -19,3 +21,13 @@ def test_invalid_json_file():
 
 def test_null():
     assert Linter.validate("null") == []
+
+
+@pytest.mark.parametrize(
+    "filepath",
+    [
+        ("states-uuid-invocation.json"),
+    ],
+)
+def test_valid_json(filepath):
+    assert Linter().validate(get_path(filepath)) == []
