@@ -15,13 +15,13 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            python: 3.6
+            python: 3.8
             type: test-only
           - os: ubuntu-latest
-            python: 3.9
+            python: 3.11
             type: all
           - os: windows-latest
-            python: 3.9
+            python: 3.11
             type: test-only
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
