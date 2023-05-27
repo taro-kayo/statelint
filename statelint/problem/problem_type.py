@@ -2,6 +2,9 @@ from enum import Enum
 
 
 class ProblemType(str, Enum):
+    def __str__(self) -> str:
+        return self.value
+
     # type check
     FLOAT = "a Float"
     STRING = "a String"

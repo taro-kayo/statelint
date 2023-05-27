@@ -9,7 +9,9 @@ FOLLOWING_NAME_CLASSES = [*INITIAL_NAME_CLASSES, *NON_INITIAL_NAME_CLASSES]
 DOT_SEPARATOR = r"\.\.?"
 
 INTRINSIC_INVOCATION_PATTERN = re.compile(
-    r"^States\.(JsonToString|Format|StringToJson|Array)\(.+\)$"
+    r"^States\.(JsonToString|Format|StringToJson|Array|ArrayPartition|ArrayContains"
+    r"|ArrayRange|ArrayGetItem|ArrayLength|ArrayUnique|Base64Encode|Base64Decode"
+    r"|Hash|JsonMerge|MathRandom|MathAdd|StringSplit|UUID)\(.*\)$"
 )
 
 

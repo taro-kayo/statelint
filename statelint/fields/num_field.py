@@ -11,7 +11,11 @@ class BaseNumericField(NonNullMixin, Field, ABC):
     _ceiling: Optional[int]
 
     def __init__(
-        self, name: str, floor: int = None, ceiling: int = None, inclusive: bool = True
+        self,
+        name: str,
+        floor: Optional[int] = None,
+        ceiling: Optional[int] = None,
+        inclusive: bool = True,
     ) -> None:
         super().__init__(name)
         self._floor = floor
