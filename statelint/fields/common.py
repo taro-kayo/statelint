@@ -4,6 +4,9 @@ from typing import Any
 
 
 class Comparison(str, Enum):
+    def __str__(self) -> str:
+        return self.value
+
     STRING_EQUALS = "StringEquals"
     STRING_LESS_THAN = "StringLessThan"
     STRING_GREATER_THAN = "StringGreaterThan"
@@ -46,6 +49,9 @@ class Comparison(str, Enum):
 
 
 class StateType(str, Enum):
+    def __str__(self) -> str:
+        return self.value
+
     PASS = "Pass"
     SUCCEED = "Succeed"
     FAIL = "Fail"
