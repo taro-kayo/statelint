@@ -18,10 +18,10 @@ jobs:
             python: 3.8
             type: test-only
           - os: ubuntu-latest
-            python: 3.11
+            python: 3.12
             type: all
           - os: windows-latest
-            python: 3.11
+            python: 3.12
             type: test-only
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
@@ -41,16 +41,15 @@ jobs:
           python -m pip install -r requirements/test.txt
 
       - name: Lint
-        if: ${{ matrix.type == 'all' }}
+        if: matrix.type == 'all'
         uses: pre-commit/action@v3.0.1
 
       - name: Run test suite
-        if: ${{ matrix.type != 'all' }}
-        run: |
-          pytest tests
+        if: matrix.type != 'all'
+        run: pytest tests
 
       - name: Coveralls
-        if: ${{ matrix.type == 'all' }}
+        if: matrix.type == 'all'
         run: |
           pip install coveralls
           coverage run --source=statelint -m pytest tests
