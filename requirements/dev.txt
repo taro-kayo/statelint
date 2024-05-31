@@ -1,6 +1,6 @@
 -r ./test.txt
 
-pre-commit==3.3.2
+pre-commit==3.7.1
 black==24.3.0
 flake8==6.1.0
 isort==5.13.2
