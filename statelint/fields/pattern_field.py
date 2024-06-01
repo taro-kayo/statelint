@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Callable, List
 
 from ..problem import ProblemPredicate, ProblemType
-from ..utils.re_helper import is_path, is_reference_path
+from ..utils.re_helper import is_intrinsic_invocation, is_path, is_reference_path
 from .base import NonNullMixin
 from .str_field import NullableStrField
 
@@ -51,6 +51,21 @@ class NullableRefPathField(PatternField):
 
 
 class RefPathField(NonNullMixin, NullableRefPathField):
+    pass
+
+
+class NullableRefPathOrFuncField(PatternField):
+    def __init__(self, name: str) -> None:
+        super().__init__(
+            name, lambda v: is_reference_path(v) or is_intrinsic_invocation(v)
+        )
+
+    @property
+    def problem_type(self) -> ProblemType:
+        return ProblemType.REFERENCE_PATH_OR_FUNC
+
+
+class RefPathOrFuncField(NonNullMixin, NullableRefPathOrFuncField):
     pass
 
 

@@ -13,6 +13,7 @@ from .object_field import ObjectField as _ObjectField
 from .pattern_field import JsonPathField as _JsonPathField
 from .pattern_field import NullableRefPathField as _NullableRefPathField
 from .pattern_field import RefPathField as _RefPathField
+from .pattern_field import RefPathOrFuncField as _RefPathOrFuncField
 from .pattern_field import UriField as _UriField
 from .str_field import EnumStrField as _EnumStrField
 from .str_field import NullableStrField as _NullableStrField
@@ -28,7 +29,9 @@ TIMESTAMP = _TimestampField("Timestamp")
 TIMESTAMP_PATH = _RefPathField("TimestampPath")
 
 CAUSE = _StrField("Cause")
+CAUSE_PATH = _RefPathOrFuncField("CausePath")
 ERROR = _StrField("Error")
+ERROR_PATH = _RefPathOrFuncField("ErrorPath")
 
 RESULT = _AnyField("Result")
 RESULT_SELECTOR = _AnyField("ResultSelector")
