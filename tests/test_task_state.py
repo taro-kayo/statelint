@@ -14,7 +14,22 @@ def test_ok():
                 "TimeoutSeconds": 1,
                 "ResultSelector": {},
                 "Parameters": {},
+                "Credentials": {},
                 "Catch": [],
+            }
+        },
+        "StartAt": "x",
+    }
+    assert Linter.validate(state_machine) == []
+
+
+def test_ok_min():
+    state_machine = {
+        "States": {
+            "x": {
+                "Type": "Task",
+                "End": True,
+                "Resource": "arn:x",
             }
         },
         "StartAt": "x",

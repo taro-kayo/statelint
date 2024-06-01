@@ -45,6 +45,7 @@ TIMEOUT_SECONDS = _IntegerField("TimeoutSeconds", 0, 99999999)
 HEARTBEAT_SECONDS = _IntegerField("HeartbeatSeconds", 0, 99999999)
 TIMEOUT_SECONDS_PATH = _RefPathField("TimeoutSecondsPath")
 HEARTBEAT_SECONDS_PATH = _RefPathField("HeartbeatSecondsPath")
+CREDENTIALS = _ObjectField("Credentials")
 
 TYPE = _EnumStrField("Type", [t.value for t in StateType])
 
