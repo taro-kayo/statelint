@@ -1,6 +1,7 @@
 from typing import List
 
 from ..fields import (
+    CREDENTIALS,
     HEARTBEAT_SECONDS,
     HEARTBEAT_SECONDS_PATH,
     RESOURCE,
@@ -38,4 +39,5 @@ class TaskState(
             RESOURCE,
             OneOfField(TIMEOUT_SECONDS, TIMEOUT_SECONDS_PATH),
             OneOfField(HEARTBEAT_SECONDS, HEARTBEAT_SECONDS_PATH),
+            CREDENTIALS,
         ]
