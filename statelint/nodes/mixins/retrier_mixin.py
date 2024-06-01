@@ -4,7 +4,9 @@ from ...fields import (
     BACKOFF_RATE,
     ERROR_EQUALS,
     INTERVAL_SECONDS,
+    JITTER_STRATEGY,
     MAX_ATTEMPTS,
+    MAX_DELAY_SECONDS,
     RETRY,
     Field,
 )
@@ -20,7 +22,14 @@ class Retrier(ResultPathMixin, Node):
 
     @property
     def optional_fields(self) -> List[Field]:
-        return [*super().optional_fields, INTERVAL_SECONDS, MAX_ATTEMPTS, BACKOFF_RATE]
+        return [
+            *super().optional_fields,
+            INTERVAL_SECONDS,
+            MAX_ATTEMPTS,
+            BACKOFF_RATE,
+            MAX_DELAY_SECONDS,
+            JITTER_STRATEGY,
+        ]
 
 
 class RetryMixin(Node):

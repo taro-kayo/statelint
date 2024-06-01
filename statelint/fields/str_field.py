@@ -26,14 +26,13 @@ class EnumStrField(StrField):
 
     def validate(self, value: Any) -> List[ProblemPredicate]:
         problems = super().validate(value)
-        if problems:
-            return problems
-        if value not in self.choices:
+        str_val = "" if value is None else str(value)
+        if str_val not in self.choices:
             choices = ", ".join(f'"{c}"' for c in self.choices)
-            return [
+            problems += [
                 ProblemPredicate(
-                    f' is "{value}", not one of the allowed values [{choices}]'
+                    f' is "{str_val}", not one of the allowed values [{choices}]'
                 )
             ]
 
-        return []
+        return problems
