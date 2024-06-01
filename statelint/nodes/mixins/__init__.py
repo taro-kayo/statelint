@@ -4,7 +4,12 @@ from ...fields import END, NEXT, RESULT, TIMEOUT_SECONDS, Field
 from ..node import Node
 from .catcher_mixin import CatchMixin
 from .choices_mixin import ChoicesMixin
-from .payload_template_mixin import ParametersMixin, ResultSelectorMixin
+from .payload_template_mixin import (
+    BatchInputMixin,
+    ItemSelectorMixin,
+    ParametersMixin,
+    ResultSelectorMixin,
+)
 from .result_path_mixin import ResultPathMixin
 from .retrier_mixin import RetryMixin
 

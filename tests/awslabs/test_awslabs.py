@@ -170,6 +170,14 @@ from statelint.linter import Linter
             "wait-with-resultselector.json",
             ['Field "ResultSelector" not allowed in State Machine.States.p'],
         ),
+        ("map-with-itemprocessor.json", []),
+        (
+            "map-with-itemprocessor-and-iterator.json",
+            [
+                "State Machine.States.m may have only one of "
+                '["Iterator", "ItemProcessor"]'
+            ],
+        ),
     ],
 )
 def test_main(filepath, expected):

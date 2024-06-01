@@ -6,7 +6,7 @@ from subprocess import Popen
 from tempfile import NamedTemporaryFile
 
 
-def main():
+def main() -> None:
     _dict = literal_eval(sys.argv[1])
     with NamedTemporaryFile("w") as temp:
         json.dump(_dict, temp)

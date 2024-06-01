@@ -1,7 +1,14 @@
 import itertools
 from typing import Any, List
 
-from ...fields import PARAMETERS, RESULT_SELECTOR, Field
+from ...fields import (
+    BATCH_INPUT,
+    ITEM_SELECTOR,
+    PARAMETERS,
+    RESULT_SELECTOR,
+    Field,
+    OneOfField,
+)
 from ...problem import Problem
 from ...utils.re_helper import is_intrinsic_invocation, is_path
 from ..node import Node, StatePath
@@ -22,6 +29,22 @@ class ParametersMixin(Node):
         )
 
 
+class ItemSelectorMixin(Node):
+    @property
+    def optional_fields(self) -> List[Field]:
+        return [*super().optional_fields, OneOfField(PARAMETERS, ITEM_SELECTOR)]
+
+    def validate(self) -> List[Problem]:
+        problems = [*super().validate()]
+        for field in (PARAMETERS, ITEM_SELECTOR):
+            if isinstance(self._state.get(field.name), dict):
+                problems += _validate_payload(
+                    field, self.state_path, self._state[field.name]
+                )
+
+        return problems
+
+
 class ResultSelectorMixin(Node):
     @property
     def optional_fields(self) -> List[Field]:
@@ -35,6 +58,20 @@ class ResultSelectorMixin(Node):
         return problems + _validate_payload(
             RESULT_SELECTOR, self.state_path, self._state[RESULT_SELECTOR.name]
         )
+
+
+class BatchInputMixin(Node):
+    @property
+    def optional_fields(self) -> List[Field]:
+        return [*super().optional_fields, BATCH_INPUT]
+
+    def validate(self) -> List[Problem]:
+        problems = super().validate()
+        batch_input = self._state.get(BATCH_INPUT.name)
+        if not isinstance(batch_input, dict):
+            return problems
+
+        return problems + _validate_payload(BATCH_INPUT, self.state_path, batch_input)
 
 
 def _validate_payload(
