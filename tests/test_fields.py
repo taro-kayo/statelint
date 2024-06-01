@@ -7,6 +7,8 @@ def test_null_type():
     state_machine = {"StartAt": "x", "States": {"x": {"Type": None, "End": True}}}
     assert Linter.validate(state_machine) == [
         "State Machine.States.x.Type should be non-null",
+        'State Machine.States.x.Type is "", not one of the allowed values '
+        '["Pass", "Succeed", "Fail", "Task", "Choice", "Wait", "Parallel", "Map"]',
         'Field "End" not allowed in State Machine.States.x',
     ]
 

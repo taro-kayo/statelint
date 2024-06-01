@@ -63,6 +63,8 @@ ERROR_EQUALS = _NonEmptyListField("ErrorEquals", _StrField)
 INTERVAL_SECONDS = _IntegerField("IntervalSeconds", 0)
 MAX_ATTEMPTS = _IntegerField("MaxAttempts", -1, 99999999)
 BACKOFF_RATE = _FloatField("BackoffRate", 1, inclusive=False)
+MAX_DELAY_SECONDS = _IntegerField("MaxDelaySeconds", 0)
+JITTER_STRATEGY = _EnumStrField("JitterStrategy", ["FULL", "NONE"])
 
 
 CHOICES = _NonEmptyListField("Choices", _ObjectField)
