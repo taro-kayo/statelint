@@ -11,8 +11,7 @@ name: Upload Python Package
 on:
   release:
     types:
-      - released
-      - prereleased
+      - published
 
 jobs:
   deploy:
@@ -32,12 +31,12 @@ jobs:
         run: python -m build
       - name: Publish distribution 📦 to Test PyPI
         uses: pypa/gh-action-pypi-publish@v1.8.14
-        if: github.event.action == 'prereleased'
+        if: ${{ github.event.release.prerelease && !github.event.release.draft }}
         with:
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
           repository-url: https://test.pypi.org/legacy/
       - name: Publish distribution 📦 to PyPI
         uses: pypa/gh-action-pypi-publish@v1.8.14
-        if: github.event.action == 'released'
+        if: ${{ !github.event.release.prerelease && !github.event.release.draft }}
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
