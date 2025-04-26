@@ -3,7 +3,7 @@ from typing import List
 from ...fields import END, NEXT, RESULT, TIMEOUT_SECONDS, Field
 from ..node import Node
 from .assign_mixin import AssignMixin
-from .catcher_mixin import CatchMixin
+from .catch_mixin import CatchMixin
 from .choices_mixin import ChoicesMixin
 from .output_mixin import OutputMixin
 from .payload_template_mixin import (
