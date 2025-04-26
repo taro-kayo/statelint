@@ -44,11 +44,12 @@ jobs:
         if: matrix.type != 'all'
         run: pytest tests
 
+      - name: Run test suite with coverage
+        if: matrix.type == 'all'
+        run: coverage run --source=statelint -m pytest tests
+
       - name: Coveralls
         if: matrix.type == 'all'
-        run: |
-          pip install coveralls
-          coverage run --source=statelint -m pytest tests
-          coveralls --service=github
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
+        with:
+          format: python
