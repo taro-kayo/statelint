@@ -1,4 +1,4 @@
-from typing import Any, List, Type
+from typing import Any, Type
 
 from ..problem import ProblemPredicate, ProblemType
 from .base import Field, NonNullMixin
@@ -9,7 +9,7 @@ class ListField(NonNullMixin, Field):
         super().__init__(name)
         self._element_field_type = element_field_type(name)
 
-    def validate(self, value: Any) -> List[ProblemPredicate]:
+    def validate(self, value: Any) -> list[ProblemPredicate]:
         problems = super().validate(value)
         if problems:
             return problems
@@ -24,7 +24,7 @@ class ListField(NonNullMixin, Field):
 
 
 class NonEmptyListField(ListField):
-    def validate(self, value: Any) -> List[ProblemPredicate]:
+    def validate(self, value: Any) -> list[ProblemPredicate]:
         problems = super().validate(value)
         if problems:
             return problems

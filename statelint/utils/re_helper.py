@@ -1,5 +1,5 @@
 import functools
-from typing import List, Pattern
+from typing import Pattern
 
 import regex as re  # for unicode codepoint (\p{})
 
@@ -68,6 +68,6 @@ def _make_bracket_step(name_re: str) -> str:
     return rf"\['{name_re}']"
 
 
-def _classes_to_re(classes: List[str]) -> str:
+def _classes_to_re(classes: list[str]) -> str:
     joined = "".join(rf"\p{{{c}}}" for c in classes)
     return f"[{joined}]"

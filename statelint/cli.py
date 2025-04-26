@@ -2,7 +2,7 @@ import importlib
 import platform
 import sys
 from argparse import ArgumentParser
-from typing import Iterable, List, Optional, Sequence, Set, Tuple
+from typing import Iterable, Optional, Sequence
 
 from . import __version__
 from .config import Config
@@ -45,8 +45,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
 
 def _get_problems(
-    input_list: List[str], config: Config
-) -> Iterable[Tuple[str, List[str]]]:
+    input_list: list[str], config: Config
+) -> Iterable[tuple[str, list[str]]]:
     for filepath_or_text in input_list:
         problems = Linter.validate(filepath_or_text, config)
         if problems:
@@ -92,7 +92,7 @@ def _make_arg_parser() -> ArgumentParser:
     return parser
 
 
-def _ignore_types(value: str) -> Set[ProblemType]:
+def _ignore_types(value: str) -> set[ProblemType]:
     values = set(v.strip() for v in value.split(","))
     if values - set(IGNORABLE_TYPES):
         raise ValueError()

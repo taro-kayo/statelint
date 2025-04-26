@@ -1,6 +1,6 @@
 from abc import ABC
 from collections import OrderedDict
-from typing import Any, List
+from typing import Any
 
 from ...fields import (
     AND,
@@ -104,14 +104,14 @@ COMPARISONS = OneOfField(
 
 class BaseChoiceRule(OutputMixin, AssignMixin, ABC):
     @property
-    def required_fields(self) -> List[Field]:
+    def required_fields(self) -> list[Field]:
         fields = super().required_fields
         if self.query_language == QueryLanguage.JSONata:
             return [*fields, CONDITION]
         return fields
 
     @property
-    def optional_fields(self) -> List[Field]:
+    def optional_fields(self) -> list[Field]:
         fields = super().optional_fields
         if self.query_language == QueryLanguage.JSONata:
             return fields
@@ -120,13 +120,13 @@ class BaseChoiceRule(OutputMixin, AssignMixin, ABC):
         return [*fields, AND, OR, NOT]
 
     @property
-    def forbidden_fields(self) -> List[Field]:
+    def forbidden_fields(self) -> list[Field]:
         fields = [f for f in super().forbidden_fields]
         if VARIABLE.name in self._state:
             return [*fields, AND, OR, NOT]
         return fields
 
-    def validate(self) -> List[Problem]:
+    def validate(self) -> list[Problem]:
         problems = list(super().validate())
         for field in (AND.name, OR.name):
             if isinstance(self._state.get(field), list):
@@ -137,7 +137,7 @@ class BaseChoiceRule(OutputMixin, AssignMixin, ABC):
 
         return problems
 
-    def _validate_child(self, field_name: str, child: Any) -> List[Problem]:
+    def _validate_child(self, field_name: str, child: Any) -> list[Problem]:
         if isinstance(child, dict):
             return NestedChoiceRule(
                 self.state_path.make_child(field_name), child, self.query_language
@@ -147,22 +147,22 @@ class BaseChoiceRule(OutputMixin, AssignMixin, ABC):
 
 class ChoiceRule(BaseChoiceRule):
     @property
-    def required_fields(self) -> List[Field]:
+    def required_fields(self) -> list[Field]:
         return [*super().required_fields, NEXT]
 
 
 class NestedChoiceRule(BaseChoiceRule):
     @property
-    def forbidden_fields(self) -> List[Field]:
+    def forbidden_fields(self) -> list[Field]:
         return [NEXT, *super().forbidden_fields]
 
 
 class ChoicesMixin(Node):
     @property
-    def required_fields(self) -> List[Field]:
+    def required_fields(self) -> list[Field]:
         return [*super().required_fields, CHOICES]
 
-    def validate(self) -> List[Problem]:
+    def validate(self) -> list[Problem]:
         problems = super().validate()
         if not isinstance(self._state.get(CHOICES.name), list):
             return problems
@@ -177,7 +177,7 @@ class ChoicesMixin(Node):
             ).validate()
         ]
 
-    def get_reachable_states(self) -> List[NameAndPath]:
+    def get_reachable_states(self) -> list[NameAndPath]:
         # use OrderedDict as set to preserve order
         reachable_states = OrderedDict({s: 0 for s in super().get_reachable_states()})
         if isinstance(self._state.get(DEFAULT.name), str):

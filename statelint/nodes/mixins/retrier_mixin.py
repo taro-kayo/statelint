@@ -1,5 +1,3 @@
-from typing import List
-
 from ...fields import (
     BACKOFF_RATE,
     ERROR_EQUALS,
@@ -17,11 +15,11 @@ from .result_path_mixin import ResultPathMixin
 
 class Retrier(ResultPathMixin, Node):
     @property
-    def required_fields(self) -> List[Field]:
+    def required_fields(self) -> list[Field]:
         return [*super().required_fields, ERROR_EQUALS]
 
     @property
-    def optional_fields(self) -> List[Field]:
+    def optional_fields(self) -> list[Field]:
         return [
             *super().optional_fields,
             INTERVAL_SECONDS,
@@ -34,10 +32,10 @@ class Retrier(ResultPathMixin, Node):
 
 class RetryMixin(Node):
     @property
-    def optional_fields(self) -> List[Field]:
+    def optional_fields(self) -> list[Field]:
         return [*super().optional_fields, RETRY]
 
-    def validate(self) -> List[Problem]:
+    def validate(self) -> list[Problem]:
         state = self._state
         problems = super().validate()
         if not isinstance(state.get(RETRY.name), list):

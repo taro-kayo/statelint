@@ -1,5 +1,5 @@
 import itertools
-from typing import Any, List
+from typing import Any
 
 from ...fields import (
     BATCH_INPUT,
@@ -16,10 +16,10 @@ from ..node import Node, StatePath
 
 class ParametersMixin(Node):
     @property
-    def optional_fields(self) -> List[Field]:
+    def optional_fields(self) -> list[Field]:
         return [*super().optional_fields, PARAMETERS]
 
-    def validate(self) -> List[Problem]:
+    def validate(self) -> list[Problem]:
         problems = [*super().validate()]
         if not isinstance(self._state.get(PARAMETERS.name), dict):
             return problems
@@ -31,10 +31,10 @@ class ParametersMixin(Node):
 
 class ItemSelectorMixin(Node):
     @property
-    def optional_fields(self) -> List[Field]:
+    def optional_fields(self) -> list[Field]:
         return [*super().optional_fields, OneOfField(PARAMETERS, ITEM_SELECTOR)]
 
-    def validate(self) -> List[Problem]:
+    def validate(self) -> list[Problem]:
         problems = [*super().validate()]
         for field in (PARAMETERS, ITEM_SELECTOR):
             if isinstance(self._state.get(field.name), dict):
@@ -47,10 +47,10 @@ class ItemSelectorMixin(Node):
 
 class ResultSelectorMixin(Node):
     @property
-    def optional_fields(self) -> List[Field]:
+    def optional_fields(self) -> list[Field]:
         return [*super().optional_fields, RESULT_SELECTOR]
 
-    def validate(self) -> List[Problem]:
+    def validate(self) -> list[Problem]:
         problems = [*super().validate()]
         if not isinstance(self._state.get(RESULT_SELECTOR.name), dict):
             return problems
@@ -62,10 +62,10 @@ class ResultSelectorMixin(Node):
 
 class BatchInputMixin(Node):
     @property
-    def optional_fields(self) -> List[Field]:
+    def optional_fields(self) -> list[Field]:
         return [*super().optional_fields, BATCH_INPUT]
 
-    def validate(self) -> List[Problem]:
+    def validate(self) -> list[Problem]:
         problems = super().validate()
         batch_input = self._state.get(BATCH_INPUT.name)
         if not isinstance(batch_input, dict):
@@ -76,7 +76,7 @@ class BatchInputMixin(Node):
 
 def _validate_payload(
     field: Field, current_path: StatePath, param: Any
-) -> List[Problem]:
+) -> list[Problem]:
     problems = []
     if isinstance(param, list):
         return list(

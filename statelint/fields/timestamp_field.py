@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import Any
 
 from dateutil import parser
 
@@ -8,7 +8,7 @@ from .common import to_json
 
 
 class TimestampField(NonNullMixin, Field):
-    def validate(self, value: Any) -> List[ProblemPredicate]:
+    def validate(self, value: Any) -> list[ProblemPredicate]:
         problems = super().validate(value)
         if problems:
             return problems

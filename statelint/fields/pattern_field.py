@@ -1,6 +1,6 @@
 import re
 from abc import ABC, abstractmethod
-from typing import Any, Callable, List
+from typing import Any, Callable
 
 from ..problem import ProblemPredicate, ProblemType
 from ..utils.re_helper import is_intrinsic_invocation, is_path, is_reference_path
@@ -18,7 +18,7 @@ class PatternField(NullableStrField, ABC):
     def problem_type(self) -> ProblemType:
         pass  # pragma: no cover
 
-    def validate(self, value: Any) -> List[ProblemPredicate]:
+    def validate(self, value: Any) -> list[ProblemPredicate]:
         problems = super().validate(value)
         if problems:
             return problems

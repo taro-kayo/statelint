@@ -1,5 +1,5 @@
 import itertools
-from typing import Any, Dict, List
+from typing import Any
 
 from ..fields import BRANCHES, Field, QueryLanguage
 from ..problem import Problem
@@ -36,14 +36,14 @@ class ParallelState(
         self,
         node_factory: NodeFactory,
         state_path: StatePath,
-        state: Dict[str, Any],
+        state: dict[str, Any],
         current_query_language: QueryLanguage,
     ) -> None:
         super().__init__(state_path, state, current_query_language)
         self._node_factory = node_factory
         self._branches = self._get_branches(state)
 
-    def _get_branches(self, state: Dict[str, Any]) -> List[ContainerState]:
+    def _get_branches(self, state: dict[str, Any]) -> list[ContainerState]:
         branches = state.get(BRANCHES.name)
         if not isinstance(branches, list):
             return []
@@ -59,15 +59,15 @@ class ParallelState(
         ]
 
     @property
-    def required_fields(self) -> List[Field]:
+    def required_fields(self) -> list[Field]:
         return [*super().required_fields, BRANCHES]
 
-    def get_children(self) -> List[NameAndPath]:
+    def get_children(self) -> list[NameAndPath]:
         return list(
             itertools.chain.from_iterable(b.get_children() for b in self._branches)
         )
 
-    def validate(self) -> List[Problem]:
+    def validate(self) -> list[Problem]:
         return super().validate() + [
             p for branch in self._branches for p in branch.validate()
         ]
