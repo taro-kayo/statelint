@@ -10,6 +10,10 @@
     "python.testing.pytestEnabled": true,
     "cSpell.words": [
         "blecch",
-        "dateutil"
+        "dateutil",
+        "pypa",
+        "PYPI",
+        "pytest",
+        "statelint"
     ]
 }
