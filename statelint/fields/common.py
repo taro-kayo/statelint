@@ -4,7 +4,7 @@ from typing import Any
 
 
 class Comparison(str, Enum):
-    def __str__(self) -> str:
+    def __str__(self) -> str:  # pragma: no cover
         return self.value
 
     STRING_EQUALS = "StringEquals"
@@ -49,7 +49,7 @@ class Comparison(str, Enum):
 
 
 class StateType(str, Enum):
-    def __str__(self) -> str:
+    def __str__(self) -> str:  # pragma: no cover
         return self.value
 
     PASS = "Pass"
@@ -63,7 +63,7 @@ class StateType(str, Enum):
 
 
 class QueryLanguage(str, Enum):
-    def __str__(self) -> str:
+    def __str__(self) -> str:  # pragma: no cover
         return self.value
 
     @staticmethod

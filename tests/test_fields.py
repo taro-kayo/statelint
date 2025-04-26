@@ -64,3 +64,19 @@ def test_invalid_jsonata(value, expected):
     assert Linter.validate(state_machine) == [
         f"State Machine.States.x.Arguments is {expected} but should be a JSONata"
     ]
+
+
+def test_unknown_query_language():
+    state_machine = {
+        "StartAt": "x",
+        "QueryLanguage": "Yaml",
+        "States": {
+            "x": {
+                "Type": "Fail",
+            }
+        },
+    }
+    assert Linter.validate(state_machine) == [
+        'State Machine.QueryLanguage is "Yaml", not one of the allowed values '
+        '["JSONPath", "JSONata"]',
+    ]
