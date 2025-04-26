@@ -1,0 +1,35 @@
+{
+    "StartAt": "p",
+    "States": {
+        "p": {
+            "Type": "Task",
+            "QueryLanguage": "JSONata",
+            "Resource": "foo:bar",
+            "End": true,
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "java.lang.Exception"
+                    ],
+                    "Output": "{% $merge([ $states.input, {'error-info': $states.errorOutput} ]) %}",
+                    "Next": "x"
+                },
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "Assign": {
+                        "isCritical": "{% $contains($lowercase($states.errorOutput.Error), /.*fatal.*/)  %}"
+                    },
+                    "Next": "y"
+                }
+            ]
+        },
+        "x": {
+            "Type": "Fail"
+        },
+        "y": {
+            "Type": "Succeed"
+        }
+    }
+}

@@ -10,6 +10,15 @@
     "python.testing.pytestEnabled": true,
     "cSpell.words": [
         "blecch",
-        "dateutil"
-    ]
+        "coverallsapp",
+        "dateutil",
+        "jsonata",
+        "pypa",
+        "PYPI",
+        "pytest",
+        "statelint"
+    ],
+    "[github-actions-workflow]": {
+        "editor.tabSize": 2
+    }
 }

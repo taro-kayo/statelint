@@ -2,8 +2,9 @@ from ..problem import ProblemPredicate
 from .any_field import AnyField as _AnyField
 from .base import Field
 from .bool_field import BoolField as _BoolField
-from .common import StateType
+from .common import QueryLanguage, StateType
 from .container import OneOfField
+from .jsonata_field import JSONataField as _JSONataField
 from .list_field import ListField as _ListField
 from .list_field import NonEmptyListField as _NonEmptyListField
 from .num_field import FloatField as _FloatField
@@ -22,6 +23,9 @@ from .timestamp_field import TimestampField as _TimestampField
 
 VERSION = _StrField("Version")
 COMMENT = _StrField("Comment")
+QUERY_LANGUAGE = _EnumStrField("QueryLanguage", ["JSONPath", "JSONata"])
+OUTPUT = _AnyField("Output")
+ASSIGN = _ObjectField("Assign")
 
 SECONDS = _IntegerField("Seconds", 0, inclusive=False)
 SECONDS_PATH = _RefPathField("SecondsPath")
@@ -56,6 +60,7 @@ INPUT_PATH = _NullableStrField("InputPath")
 OUTPUT_PATH = _NullableStrField("OutputPath")
 
 RESOURCE = _UriField("Resource")
+ARGUMENTS = _JSONataField("Arguments", _ObjectField)
 
 CATCH = _ListField("Catch", _ObjectField)
 RETRY = _ListField("Retry", _ObjectField)
@@ -69,6 +74,7 @@ JITTER_STRATEGY = _EnumStrField("JitterStrategy", ["FULL", "NONE"])
 
 CHOICES = _NonEmptyListField("Choices", _ObjectField)
 DEFAULT = _StrField("Default")
+CONDITION = _StrField("Condition")
 
 AND = _NonEmptyListField("And", _ObjectField)
 OR = _NonEmptyListField("Or", _ObjectField)
@@ -143,3 +149,4 @@ TOLERATED_FAILURE_PERCENTAGE = _IntegerField(
     "ToleratedFailurePercentage", 0, 100, inclusive=False
 )
 TOLERATED_FAILURE_PERCENTAGE_PATH = _RefPathField("ToleratedFailurePercentagePath")
+ITEMS = _JSONataField("Items", lambda s: _ListField(s, _AnyField))

@@ -18,5 +18,6 @@ class ProblemType(str, Enum):
     REFERENCE_PATH = "a Reference Path"
     REFERENCE_PATH_OR_FUNC = "a Reference Path or an Intrinsic Function"
     JSON_PATH = "a JSONPath"
+    JSONata = "a JSONata"
 
     UNKNOWN = "unknown"

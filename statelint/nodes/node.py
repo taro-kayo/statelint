@@ -1,8 +1,8 @@
 import functools
 from collections import OrderedDict
-from typing import Any, Dict, List, NamedTuple, Union
+from typing import Any, NamedTuple, Optional, Union
 
-from ..fields import COMMENT, Field, ProblemPredicate
+from ..fields import COMMENT, QUERY_LANGUAGE, Field, ProblemPredicate, QueryLanguage
 from ..problem import Problem
 
 StatePathType = Union[str, int, Field]
@@ -15,7 +15,7 @@ class NameAndPath(NamedTuple):
 
 class StatePath:
     _root: str
-    _paths: List[StatePathType]
+    _paths: list[StatePathType]
 
     def __init__(self, root: str, *paths: StatePathType):
         self._root = root
@@ -45,13 +45,27 @@ class StatePath:
         return Problem(f"{self}{predicate}", predicate.type)
 
 
+def _get_query_language(state: dict[str, Any]) -> Optional[QueryLanguage]:
+    raw_query_language = state.get(QUERY_LANGUAGE.name)
+    if raw_query_language:
+        return QueryLanguage.of(raw_query_language)
+    return None
+
+
 class Node:
     state_path: StatePath
-    _state: Dict[str, Any]
+    _state: dict[str, Any]
+    _query_language: QueryLanguage
 
-    def __init__(self, state_path: StatePath, state: Dict[str, Any]) -> None:
+    def __init__(
+        self,
+        state_path: StatePath,
+        state: dict[str, Any],
+        current_query_language: QueryLanguage,
+    ) -> None:
         self.state_path = state_path
         self._state = state
+        self._query_language = _get_query_language(state) or current_query_language
 
     def __str__(self) -> str:
         return self.__repr__()
@@ -60,28 +74,32 @@ class Node:
         return f"{self.__class__.__name__}({self.state_path}, {self._state})"
 
     @property
-    def required_fields(self) -> List[Field]:
+    def required_fields(self) -> list[Field]:
         return []
 
     @property
-    def optional_fields(self) -> List[Field]:
+    def optional_fields(self) -> list[Field]:
         return [COMMENT]
 
     @property
-    def forbidden_fields(self) -> List[Field]:
+    def query_language(self) -> QueryLanguage:
+        return self._query_language
+
+    @property
+    def forbidden_fields(self) -> list[Field]:
         # If we just want to validate extra fields, it's enough to put
         # allowed fields to required_fields/optional_fields.
         # Because we want to make our output error messages to be as same to
         # original statelint's as possible, we need this property.
         return []
 
-    def get_reachable_states(self) -> List[NameAndPath]:
+    def get_reachable_states(self) -> list[NameAndPath]:
         return []
 
-    def get_children(self) -> List[NameAndPath]:
+    def get_children(self) -> list[NameAndPath]:
         return []
 
-    def validate(self) -> List[Problem]:
+    def validate(self) -> list[Problem]:
         allowed_fields = OrderedDict(
             (f2.name, f2)
             for f1 in (self.required_fields + self.optional_fields)
@@ -95,7 +113,7 @@ class Node:
             *self._validate_required_fields(),
         ]
 
-    def _validate_fields(self, fields: Dict[str, Field]) -> List[Problem]:
+    def _validate_fields(self, fields: dict[str, Field]) -> list[Problem]:
         return [
             self.state_path.make_child(field).make_problem(problem)
             for field, value in self._state.items()
@@ -103,7 +121,7 @@ class Node:
             for problem in fields[field].validate(value)
         ]
 
-    def _validate_forbidden_fields(self) -> List[Problem]:
+    def _validate_forbidden_fields(self) -> list[Problem]:
         return [
             Problem(f'{self.state_path} has forbidden field "{field}"')
             for field in self.forbidden_fields
@@ -111,8 +129,8 @@ class Node:
         ]
 
     def _validate_not_allowed_fields(
-        self, allowed_fields: Dict[str, Field]
-    ) -> List[Problem]:
+        self, allowed_fields: dict[str, Field]
+    ) -> list[Problem]:
         forbidden_fields = set(f.name for f in self.forbidden_fields)
         return [
             Problem(f'Field "{field}" not allowed in {self.state_path}')
@@ -121,8 +139,8 @@ class Node:
         ]
 
     def _validate_optional_fields(
-        self, allowed_fields: Dict[str, Field]
-    ) -> List[Problem]:
+        self, allowed_fields: dict[str, Field]
+    ) -> list[Problem]:
         all_fields = set(self._state)
         return [
             self.state_path.make_problem(problem)
@@ -130,7 +148,7 @@ class Node:
             for problem in field.validate_as_optional(all_fields)
         ]
 
-    def _validate_required_fields(self) -> List[Problem]:
+    def _validate_required_fields(self) -> list[Problem]:
         all_fields = set(self._state)
         return [
             self.state_path.make_problem(problem)

@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Any, List, Set, Tuple, Union
+from typing import Any, Union
 
 from ..problem import ProblemPredicate, ProblemType
 from .common import to_json
@@ -17,13 +17,13 @@ class Field(ABC):
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.name})"
 
-    def validate(self, value: Any) -> List[ProblemPredicate]:
+    def validate(self, value: Any) -> list[ProblemPredicate]:
         return []
 
     @staticmethod
     def check_type(
-        value: Any, _type: Union[type, Tuple[type, ...]], problem_type: ProblemType
-    ) -> List[ProblemPredicate]:
+        value: Any, _type: Union[type, tuple[type, ...]], problem_type: ProblemType
+    ) -> list[ProblemPredicate]:
         if isinstance(value, _type):
             return []
         return [
@@ -32,20 +32,20 @@ class Field(ABC):
             )
         ]
 
-    def get_fields(self) -> List["Field"]:
+    def get_fields(self) -> list["Field"]:
         return [self]
 
-    def validate_as_required(self, names: Set[str]) -> List[ProblemPredicate]:
+    def validate_as_required(self, names: set[str]) -> list[ProblemPredicate]:
         if self.name in names:
             return []
         return [ProblemPredicate(f' does not have required field "{self.name}"')]
 
-    def validate_as_optional(self, names: Set[str]) -> List[ProblemPredicate]:
+    def validate_as_optional(self, names: set[str]) -> list[ProblemPredicate]:
         return []
 
 
 class NonNullMixin(Field):
-    def validate(self, value: Any) -> List[ProblemPredicate]:
+    def validate(self, value: Any) -> list[ProblemPredicate]:
         problems = super().validate(value)
         if problems:
             return problems

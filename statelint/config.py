@@ -1,10 +1,10 @@
-from typing import Optional, Set
+from typing import Optional
 
 from .problem import ProblemType
 
 
 class Config:
-    ignored_problem_types: Set[ProblemType]
+    ignored_problem_types: set[ProblemType]
     is_yaml: bool
 
     @property
@@ -13,7 +13,7 @@ class Config:
 
     def __init__(
         self,
-        ignored_problem_types: Optional[Set[ProblemType]] = None,
+        ignored_problem_types: Optional[set[ProblemType]] = None,
         yaml: bool = False,
     ):
         self.ignored_problem_types = ignored_problem_types or set()

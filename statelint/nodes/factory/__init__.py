@@ -6,5 +6,5 @@ from ..node import Node, StatePath
 
 class NodeFactory(ABC):
     @abstractmethod
-    def get(self, state_path: StatePath, state: Any) -> Optional[Node]:
+    def get(self, parent: Node, state_path: StatePath, state: Any) -> Optional[Node]:
         pass  # pragma: no cover

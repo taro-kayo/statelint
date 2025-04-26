@@ -1,0 +1,45 @@
+{
+    "StartAt": "A",
+    "States": {
+        "A": {
+            "Type": "Choice",
+            "QueryLanguage": "JSONata",
+            "Choices": [
+                {
+                    "Condition": "{% $states.input.type != 'Private' %}",
+                    "Next": "B"
+                },
+                {
+                    "Condition": "{% $exists($value) and $type($value)='number' and $value>=20 and $value<30 %}",
+                    "Assign": {
+                        "range": "twenties"
+                    },
+                    "Next": "C"
+                },
+                {
+                    "Condition": "{% $states.input.rating >= $states.input.auditThreshold %}",
+                    "Output": {
+                        "excess": "{% $states.input.rating - $states.input.auditThreshold %}"
+                    },
+                    "Next": "D"
+                }
+            ],
+            "Default": "E",
+            "Assign": {
+                "range": "default"
+            }
+        },
+        "B": {
+            "Type": "Succeed"
+        },
+        "C": {
+            "Type": "Succeed"
+        },
+        "D": {
+            "Type": "Succeed"
+        },
+        "E": {
+            "Type": "Succeed"
+        }
+    }
+}

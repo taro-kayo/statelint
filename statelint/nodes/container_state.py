@@ -1,7 +1,7 @@
 from collections import OrderedDict
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Optional
 
-from ..fields import END, NEXT, START_AT, STATES, TYPE, Field, StateType
+from ..fields import END, NEXT, START_AT, STATES, TYPE, Field, QueryLanguage, StateType
 from ..problem import Problem
 from .factory import NodeFactory
 from .node import NameAndPath, Node, StatePath
@@ -9,37 +9,43 @@ from .node import NameAndPath, Node, StatePath
 
 class ContainerState(Node):
     def __init__(
-        self, node_factory: NodeFactory, state_path: StatePath, state: Dict[str, Any]
+        self,
+        node_factory: NodeFactory,
+        state_path: StatePath,
+        state: dict[str, Any],
+        current_query_language: QueryLanguage,
     ) -> None:
-        super().__init__(state_path, state)
+        super().__init__(state_path, state, current_query_language)
         self._node_factory = node_factory
         self._states = self._collect_states()
 
-    def _collect_states(self) -> Dict[str, Node]:
+    def _collect_states(self) -> dict[str, Node]:
         ret_dict = OrderedDict()
         states = self._state.get(STATES.name)
         if isinstance(states, dict):
             for state_name, state in states.items():
                 validator = self._node_factory.get(
-                    self.state_path.make_child(STATES, state_name), state
+                    self,
+                    self.state_path.make_child(STATES, state_name),
+                    state,
                 )
                 if validator:
                     ret_dict[state_name] = validator
         return ret_dict
 
     @property
-    def required_fields(self) -> List[Field]:
+    def required_fields(self) -> list[Field]:
         return [*super().required_fields, STATES, START_AT]
 
-    def get_children(self) -> List[NameAndPath]:
+    def get_children(self) -> list[NameAndPath]:
         return [NameAndPath(n, s.state_path) for n, s in self._states.items()]
 
-    def validate(self) -> List[Problem]:
+    def validate(self) -> list[Problem]:
         problems = super().validate()
         states = self._state.get(STATES.name)
         reachable_states = set()
         if isinstance(states, dict):
-            all_states: Dict[str, StatePath] = {
+            all_states: dict[str, StatePath] = {
                 k: s.state_path for k, s in self._states.items()
             }
             for state in self._states.values():
@@ -70,8 +76,8 @@ class ContainerState(Node):
         return problems
 
     def _validate_transition(
-        self, start_at: Optional[str], states: Any, reachable_states: Set[NameAndPath]
-    ) -> List[Problem]:
+        self, start_at: Optional[str], states: Any, reachable_states: set[NameAndPath]
+    ) -> list[Problem]:
         if not isinstance(states, dict):
             return []
         if start_at not in states:
@@ -133,7 +139,7 @@ class ContainerState(Node):
         return problems
 
 
-def _is_terminal(state: Dict[str, Any]) -> bool:
+def _is_terminal(state: dict[str, Any]) -> bool:
     if state.get(TYPE.name) in (StateType.SUCCEED.value, StateType.FAIL.value):
         return True
     if state.get(END.name):

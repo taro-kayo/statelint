@@ -1,0 +1,22 @@
+{
+    "StartAt": "JSONPath state",
+    "States": {
+        "JSONPath state": {
+            "Type": "Pass",
+            "Assign": {
+                "total": "{% $states.input.transaction.total %}"
+            },
+            "Output": "{% $states.input.transaction.total %}",
+            "Next": "JSONata state"
+        },
+        "JSONata state": {
+            "Type": "Pass",
+            "QueryLanguage": "JSONata",
+            "Assign": "XXX",
+            "Output": {
+                "total": "{% $states.input.transaction.total %}"
+            },
+            "End": true
+        }
+    }
+}

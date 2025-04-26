@@ -4,7 +4,7 @@ from typing import Any
 
 
 class Comparison(str, Enum):
-    def __str__(self) -> str:
+    def __str__(self) -> str:  # pragma: no cover
         return self.value
 
     STRING_EQUALS = "StringEquals"
@@ -49,7 +49,7 @@ class Comparison(str, Enum):
 
 
 class StateType(str, Enum):
-    def __str__(self) -> str:
+    def __str__(self) -> str:  # pragma: no cover
         return self.value
 
     PASS = "Pass"
@@ -60,6 +60,23 @@ class StateType(str, Enum):
     WAIT = "Wait"
     PARALLEL = "Parallel"
     MAP = "Map"
+
+
+class QueryLanguage(str, Enum):
+    def __str__(self) -> str:  # pragma: no cover
+        return self.value
+
+    @staticmethod
+    def of(value: str) -> "QueryLanguage":
+        if value == "JSONata":
+            return QueryLanguage.JSONata
+        if value == "JSONPath":
+            return QueryLanguage.JSONPath
+        return QueryLanguage.Unknown
+
+    JSONata = "JSONata"
+    JSONPath = "JSONPath"
+    Unknown = "Unknown"
 
 
 def to_json(value: Any) -> str:
