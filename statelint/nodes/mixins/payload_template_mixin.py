@@ -8,6 +8,7 @@ from ...fields import (
     RESULT_SELECTOR,
     Field,
     OneOfField,
+    QueryLanguage,
 )
 from ...problem import Problem
 from ...utils.re_helper import is_intrinsic_invocation, is_path
@@ -17,7 +18,10 @@ from ..node import Node, StatePath
 class ParametersMixin(Node):
     @property
     def optional_fields(self) -> list[Field]:
-        return [*super().optional_fields, PARAMETERS]
+        fields = super().optional_fields
+        if self.query_language == QueryLanguage.JSONata:
+            return fields
+        return [*fields, PARAMETERS]
 
     def validate(self) -> list[Problem]:
         problems = [*super().validate()]
@@ -48,7 +52,10 @@ class ItemSelectorMixin(Node):
 class ResultSelectorMixin(Node):
     @property
     def optional_fields(self) -> list[Field]:
-        return [*super().optional_fields, RESULT_SELECTOR]
+        fields = super().optional_fields
+        if self.query_language == QueryLanguage.JSONata:
+            return fields
+        return [*fields, RESULT_SELECTOR]
 
     def validate(self) -> list[Problem]:
         problems = [*super().validate()]

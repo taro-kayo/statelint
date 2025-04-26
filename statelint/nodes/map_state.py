@@ -140,17 +140,25 @@ class MapState(
     def optional_fields(self) -> list[Field]:
         fields = [
             *super().optional_fields,
-            ITEMS_PATH,
-            OneOfField(MAX_CONCURRENCY, MAX_CONCURRENCY_PATH),
-            OneOfField(TOLERATED_FAILURE_COUNT, TOLERATED_FAILURE_COUNT_PATH),
-            OneOfField(TOLERATED_FAILURE_PERCENTAGE, TOLERATED_FAILURE_PERCENTAGE_PATH),
             ITEM_READER,
             RESULT_WRITER,
             ITEM_BATCHER,
         ]
         if self.query_language == QueryLanguage.JSONata:
-            return [*fields, ITEMS]
-        return fields
+            return [
+                *fields,
+                ITEMS,
+                MAX_CONCURRENCY,
+                TOLERATED_FAILURE_COUNT,
+                TOLERATED_FAILURE_PERCENTAGE,
+            ]
+        return [
+            *fields,
+            ITEMS_PATH,
+            OneOfField(MAX_CONCURRENCY, MAX_CONCURRENCY_PATH),
+            OneOfField(TOLERATED_FAILURE_COUNT, TOLERATED_FAILURE_COUNT_PATH),
+            OneOfField(TOLERATED_FAILURE_PERCENTAGE, TOLERATED_FAILURE_PERCENTAGE_PATH),
+        ]
 
     def get_children(self) -> list[NameAndPath]:
         if not self._iterator:

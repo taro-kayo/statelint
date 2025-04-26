@@ -1,4 +1,12 @@
-from ..fields import SECONDS, SECONDS_PATH, TIMESTAMP, TIMESTAMP_PATH, Field, OneOfField
+from ..fields import (
+    SECONDS,
+    SECONDS_PATH,
+    TIMESTAMP,
+    TIMESTAMP_PATH,
+    Field,
+    OneOfField,
+    QueryLanguage,
+)
 from .mixins import AssignMixin, NextXorEndMixin, OutputMixin
 from .state import State
 
@@ -6,8 +14,11 @@ from .state import State
 class WaitState(NextXorEndMixin, OutputMixin, AssignMixin, State):
     @property
     def required_fields(self) -> list[Field]:
+        fields = super().required_fields
+        if self.query_language == QueryLanguage.JSONata:
+            return [*fields, OneOfField(SECONDS, TIMESTAMP)]
         return [
-            *super().required_fields,
+            *fields,
             OneOfField(SECONDS, SECONDS_PATH, TIMESTAMP, TIMESTAMP_PATH),
         ]
 

@@ -1,4 +1,4 @@
-from ..fields import INPUT_PATH, OUTPUT_PATH, QUERY_LANGUAGE, TYPE, Field
+from ..fields import INPUT_PATH, OUTPUT_PATH, QUERY_LANGUAGE, TYPE, Field, QueryLanguage
 from .node import Node
 
 
@@ -9,4 +9,7 @@ class State(Node):
 
     @property
     def optional_fields(self) -> list[Field]:
-        return [*super().optional_fields, INPUT_PATH, OUTPUT_PATH, QUERY_LANGUAGE]
+        fields = [*super().optional_fields, QUERY_LANGUAGE]
+        if self.query_language == QueryLanguage.JSONata:
+            return fields
+        return [*fields, INPUT_PATH, OUTPUT_PATH]

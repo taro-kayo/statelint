@@ -158,7 +158,7 @@ def test_ok_arguments(config):
             "x": {
                 "Type": "Map",
                 "QueryLanguage": "JSONata",
-                "ItemsPath": "$$.x",
+                "Items": [1, 2, 3],
                 "Iterator": {"StartAt": "y", "States": {"y": {"Type": "Fail"}}},
                 config: {"Resource": "arn:x", "Arguments": "{% $foo.bar %}"},
                 "End": True,

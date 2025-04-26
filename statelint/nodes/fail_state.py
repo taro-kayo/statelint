@@ -7,6 +7,7 @@ from ..fields import (
     OUTPUT_PATH,
     Field,
     OneOfField,
+    QueryLanguage,
 )
 from .mixins import EndMixin
 from .state import State
@@ -15,8 +16,11 @@ from .state import State
 class FailState(EndMixin, State):
     @property
     def optional_fields(self) -> list[Field]:
+        fields = super().optional_fields
+        if self.query_language == QueryLanguage.JSONata:
+            return [*fields, CAUSE, ERROR]
         return [
-            *super().optional_fields,
+            *fields,
             OneOfField(CAUSE, CAUSE_PATH),
             OneOfField(ERROR, ERROR_PATH),
         ]
