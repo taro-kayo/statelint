@@ -29,6 +29,7 @@ from ..problem import Problem
 from .container_state import ContainerState
 from .factory import NodeFactory
 from .mixins import (
+    AssignMixin,
     BatchInputMixin,
     CatchMixin,
     ItemSelectorMixin,
@@ -102,6 +103,7 @@ class MapState(
     CatchMixin,
     RetryMixin,
     OutputMixin,
+    AssignMixin,
     State,
 ):
     def __init__(

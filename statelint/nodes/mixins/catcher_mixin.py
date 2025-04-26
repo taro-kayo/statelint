@@ -1,6 +1,6 @@
 from typing import Any, List
 
-from ...fields import CATCH, ERROR_EQUALS, NEXT, OUTPUT, Field
+from ...fields import ASSIGN, CATCH, ERROR_EQUALS, NEXT, OUTPUT, Field
 from ...problem import Problem
 from ..node import NameAndPath, Node
 from .result_path_mixin import ResultPathMixin
@@ -13,7 +13,7 @@ class Catcher(ResultPathMixin, Node):
 
     @property
     def optional_fields(self) -> List[Field]:
-        return [*super().optional_fields, OUTPUT]
+        return [*super().optional_fields, OUTPUT, ASSIGN]
 
 
 class CatchMixin(Node):

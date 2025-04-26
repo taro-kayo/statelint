@@ -24,6 +24,7 @@ VERSION = _StrField("Version")
 COMMENT = _StrField("Comment")
 QUERY_LANGUAGE = _EnumStrField("QueryLanguage", ["JSONPath", "JSONata"])
 OUTPUT = _AnyField("Output")
+ASSIGN = _ObjectField("Assign")
 
 SECONDS = _IntegerField("Seconds", 0, inclusive=False)
 SECONDS_PATH = _RefPathField("SecondsPath")

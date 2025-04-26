@@ -1,4 +1,5 @@
 from .mixins import (
+    AssignMixin,
     NextXorEndMixin,
     OutputMixin,
     ParametersMixin,
@@ -9,6 +10,12 @@ from .state import State
 
 
 class PassState(
-    ResultPathMixin, ResultMixin, ParametersMixin, NextXorEndMixin, OutputMixin, State
+    ResultPathMixin,
+    ResultMixin,
+    ParametersMixin,
+    NextXorEndMixin,
+    OutputMixin,
+    AssignMixin,
+    State,
 ):
     pass

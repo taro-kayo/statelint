@@ -1,0 +1,41 @@
+{
+    "QueryLanguage": "JSONata",
+    "StartAt": "Get Greeting",
+    "States": {
+        "Get Greeting": {
+            "Type": "Pass",
+            "Assign": {
+                "outer": "hello"
+            },
+            "Next": "Greet Everyone"
+        },
+        "Greet Everyone": {
+            "Type": "Map",
+            "ItemProcessor": {
+                "StartAt": "Begin",
+                "States": {
+                    "Begin": {
+                        "Type": "Pass",
+                        "Assign": {
+                            "inner": "world",
+                            "hi": "{% $outer %}"
+                        },
+                        "Next": "End"
+                    },
+                    "End": {
+                        "Type": "Succeed",
+                        "Output": "{% $hi %}"
+                    }
+                }
+            },
+            "Assign": {
+                "outer": 2
+            },
+            "Next": "Goodbye"
+        },
+        "Goodbye": {
+            "Type": "Succeed",
+            "Output": "{% $outer %}"
+        }
+    }
+}

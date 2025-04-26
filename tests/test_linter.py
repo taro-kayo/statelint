@@ -19,10 +19,18 @@ def test_invalid_json_file():
     ]
 
 
-def test_invalid_jsonata_file():
+def test_invalid_jsonata_1_file():
     file_path = get_path("invalid-jsonata-1.json")
     assert Linter.validate(file_path) == [
         'Field "Output" not allowed in State Machine.States.FailState'
+    ]
+
+
+def test_invalid_jsonata_2_file():
+    file_path = get_path("invalid-jsonata-2.json")
+    assert Linter.validate(file_path) == [
+        'State Machine.States.JSONPath state.Assign is "$.transaction.total" but '
+        "should be an Object"
     ]
 
 
@@ -35,6 +43,8 @@ def test_null():
     [
         ("states-uuid-invocation.json"),
         ("jsonata-1.json"),
+        ("jsonata-2.json"),
+        ("jsonata-3.json"),
     ],
 )
 def test_valid_json(filepath):
