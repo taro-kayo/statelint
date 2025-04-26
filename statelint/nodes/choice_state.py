@@ -1,11 +1,11 @@
 from typing import List
 
 from ..fields import DEFAULT, END, NEXT, Field
-from .mixins import ChoicesMixin
+from .mixins import ChoicesMixin, OutputMixin
 from .state import State
 
 
-class ChoiceState(ChoicesMixin, State):
+class ChoiceState(ChoicesMixin, OutputMixin, State):
     @property
     def optional_fields(self) -> List[Field]:
         return [*super().optional_fields, DEFAULT]

@@ -19,6 +19,13 @@ def test_invalid_json_file():
     ]
 
 
+def test_invalid_jsonata_file():
+    file_path = get_path("invalid-jsonata-1.json")
+    assert Linter.validate(file_path) == [
+        'Field "Output" not allowed in State Machine.States.FailState'
+    ]
+
+
 def test_null():
     assert Linter.validate("null") == []
 
@@ -27,6 +34,7 @@ def test_null():
     "filepath",
     [
         ("states-uuid-invocation.json"),
+        ("jsonata-1.json"),
     ],
 )
 def test_valid_json(filepath):

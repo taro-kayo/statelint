@@ -33,6 +33,7 @@ from .mixins import (
     CatchMixin,
     ItemSelectorMixin,
     NextXorEndMixin,
+    OutputMixin,
     ParametersMixin,
     ResultPathMixin,
     ResultSelectorMixin,
@@ -100,6 +101,7 @@ class MapState(
     TimeoutSecondsMixin,
     CatchMixin,
     RetryMixin,
+    OutputMixin,
     State,
 ):
     def __init__(

@@ -1,11 +1,11 @@
 from typing import List
 
 from ..fields import SECONDS, SECONDS_PATH, TIMESTAMP, TIMESTAMP_PATH, Field, OneOfField
-from .mixins import NextXorEndMixin
+from .mixins import NextXorEndMixin, OutputMixin
 from .state import State
 
 
-class WaitState(NextXorEndMixin, State):
+class WaitState(NextXorEndMixin, OutputMixin, State):
     @property
     def required_fields(self) -> List[Field]:
         return [

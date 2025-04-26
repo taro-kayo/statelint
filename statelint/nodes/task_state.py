@@ -13,6 +13,7 @@ from ..fields import (
 from .mixins import (
     CatchMixin,
     NextXorEndMixin,
+    OutputMixin,
     ParametersMixin,
     ResultPathMixin,
     ResultSelectorMixin,
@@ -30,6 +31,7 @@ class TaskState(
     TimeoutSecondsMixin,
     CatchMixin,
     RetryMixin,
+    OutputMixin,
     State,
 ):
     @property

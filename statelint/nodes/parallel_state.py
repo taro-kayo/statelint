@@ -8,6 +8,7 @@ from .factory import NodeFactory
 from .mixins import (
     CatchMixin,
     NextXorEndMixin,
+    OutputMixin,
     ParametersMixin,
     ResultPathMixin,
     ResultSelectorMixin,
@@ -26,6 +27,7 @@ class ParallelState(
     TimeoutSecondsMixin,
     CatchMixin,
     RetryMixin,
+    OutputMixin,
     State,
 ):
     def __init__(
