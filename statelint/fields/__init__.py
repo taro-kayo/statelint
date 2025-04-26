@@ -60,7 +60,7 @@ INPUT_PATH = _NullableStrField("InputPath")
 OUTPUT_PATH = _NullableStrField("OutputPath")
 
 RESOURCE = _UriField("Resource")
-ARGUMENTS = _JSONataField("Arguments")
+ARGUMENTS = _JSONataField("Arguments", _ObjectField)
 
 CATCH = _ListField("Catch", _ObjectField)
 RETRY = _ListField("Retry", _ObjectField)
@@ -149,3 +149,4 @@ TOLERATED_FAILURE_PERCENTAGE = _IntegerField(
     "ToleratedFailurePercentage", 0, 100, inclusive=False
 )
 TOLERATED_FAILURE_PERCENTAGE_PATH = _RefPathField("ToleratedFailurePercentagePath")
+ITEMS = _JSONataField("Items", lambda s: _ListField(s, _AnyField))

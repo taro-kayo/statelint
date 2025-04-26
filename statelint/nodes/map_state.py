@@ -4,6 +4,7 @@ from ..fields import (
     ITEM_BATCHER,
     ITEM_PROCESSOR,
     ITEM_READER,
+    ITEMS,
     ITEMS_PATH,
     ITERATOR,
     MAX_CONCURRENCY,
@@ -137,7 +138,7 @@ class MapState(
 
     @property
     def optional_fields(self) -> list[Field]:
-        return [
+        fields = [
             *super().optional_fields,
             ITEMS_PATH,
             OneOfField(MAX_CONCURRENCY, MAX_CONCURRENCY_PATH),
@@ -147,6 +148,9 @@ class MapState(
             RESULT_WRITER,
             ITEM_BATCHER,
         ]
+        if self.query_language == QueryLanguage.JSONata:
+            return [*fields, ITEMS]
+        return fields
 
     def get_children(self) -> list[NameAndPath]:
         if not self._iterator:

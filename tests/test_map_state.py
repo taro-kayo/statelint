@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from statelint.linter import Linter
@@ -159,6 +161,26 @@ def test_ok_arguments(config):
                 "ItemsPath": "$$.x",
                 "Iterator": {"StartAt": "y", "States": {"y": {"Type": "Fail"}}},
                 config: {"Resource": "arn:x", "Arguments": "{% $foo.bar %}"},
+                "End": True,
+            },
+        },
+        "StartAt": "x",
+    }
+    assert Linter.validate(state_machine) == []
+
+
+@pytest.mark.parametrize(
+    "items",
+    ["{% states.input.detail.shipped %}", [1, "{% $two %}", 3]],
+)
+def test_ok_items(items):
+    state_machine = {
+        "States": {
+            "x": {
+                "Type": "Map",
+                "QueryLanguage": "JSONata",
+                "Items": items,
+                "Iterator": {"StartAt": "y", "States": {"y": {"Type": "Fail"}}},
                 "End": True,
             },
         },
@@ -630,4 +652,26 @@ def test_ng_arguments(config):
     }
     assert Linter.validate(state_machine) == [
         f'Field "Arguments" not allowed in State Machine.States.x.{config}'
+    ]
+
+
+@pytest.mark.parametrize(
+    "items",
+    ["states.input.detail.shipped", {"bad": 42}],
+)
+def test_ng_items(items):
+    state_machine = {
+        "States": {
+            "x": {
+                "Type": "Map",
+                "QueryLanguage": "JSONata",
+                "Items": items,
+                "Iterator": {"StartAt": "y", "States": {"y": {"Type": "Fail"}}},
+                "End": True,
+            },
+        },
+        "StartAt": "x",
+    }
+    assert Linter.validate(state_machine) == [
+        f"State Machine.States.x.Items is {json.dumps(items)} but should be a JSONata"
     ]

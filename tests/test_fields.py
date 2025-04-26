@@ -62,6 +62,5 @@ def test_invalid_jsonata(value, expected):
         },
     }
     assert Linter.validate(state_machine) == [
-        f"State Machine.States.x.Arguments is {expected} but should be a JSONata "
-        "(Object or String)"
+        f"State Machine.States.x.Arguments is {expected} but should be a JSONata"
     ]
