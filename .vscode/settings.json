@@ -16,5 +16,8 @@
         "PYPI",
         "pytest",
         "statelint"
-    ]
+    ],
+    "[github-actions-workflow]": {
+        "editor.tabSize": 2
+    }
 }
