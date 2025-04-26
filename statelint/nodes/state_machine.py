@@ -1,6 +1,6 @@
 from typing import Any, Dict, List
 
-from ..fields import VERSION, Field
+from ..fields import QUERY_LANGUAGE, VERSION, Field
 from .container_state import ContainerState
 from .factory import NodeFactory
 from .mixins import TimeoutSecondsMixin
@@ -13,4 +13,4 @@ class StateMachine(TimeoutSecondsMixin, ContainerState):
 
     @property
     def optional_fields(self) -> List[Field]:
-        return [*super().optional_fields, VERSION]
+        return [*super().optional_fields, VERSION, QUERY_LANGUAGE]

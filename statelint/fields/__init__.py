@@ -22,6 +22,7 @@ from .timestamp_field import TimestampField as _TimestampField
 
 VERSION = _StrField("Version")
 COMMENT = _StrField("Comment")
+QUERY_LANGUAGE = _EnumStrField("QueryLanguage", ["JSONPath", "JSONata"])
 
 SECONDS = _IntegerField("Seconds", 0, inclusive=False)
 SECONDS_PATH = _RefPathField("SecondsPath")
