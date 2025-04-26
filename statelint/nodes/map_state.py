@@ -30,6 +30,7 @@ from ..problem import Problem
 from .container_state import ContainerState
 from .factory import NodeFactory
 from .mixins import (
+    ArgumentsMixin,
     AssignMixin,
     BatchInputMixin,
     CatchMixin,
@@ -46,7 +47,7 @@ from .node import NameAndPath, Node, StatePath
 from .state import State
 
 
-class MapConfig(ParametersMixin):
+class MapConfig(ParametersMixin, ArgumentsMixin):
     @property
     def required_fields(self) -> list[Field]:
         return [*super().required_fields, RESOURCE]

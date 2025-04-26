@@ -1,0 +1,39 @@
+{
+    "QueryLanguage": "JSONata",
+    "StartAt": "A",
+    "States": {
+        "A": {
+            "Type": "Task",
+            "Resource": "foo:bar",
+            "Arguments": {
+                "student": "{% $student.name %}",
+                "classInfo": {
+                    "teacher": "{% $class.teacher %}"
+                },
+                "values": [
+                    1,
+                    "{% $two %}",
+                    "three"
+                ]
+            },
+            "Output": "{% { 'avg': $average($student.course.grade), 'num': $count($student.course) }  %}",
+            "Next": "B"
+        },
+        "B": {
+            "Type": "Parallel",
+            "Arguments": "{% $student.course %}",
+            "Branches": [
+                {
+                    "StartAt": "x",
+                    "States": {
+                        "x": {
+                            "Type": "Succeed"
+                        }
+                    }
+                }
+            ],
+            "Parameters": "$.foo",
+            "End": true
+        }
+    }
+}

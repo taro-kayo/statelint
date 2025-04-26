@@ -146,6 +146,27 @@ def test_iterator_is_not_dict():
     ]
 
 
+@pytest.mark.parametrize(
+    "config",
+    ["ItemReader", "ResultWriter"],
+)
+def test_ok_arguments(config):
+    state_machine = {
+        "States": {
+            "x": {
+                "Type": "Map",
+                "QueryLanguage": "JSONata",
+                "ItemsPath": "$$.x",
+                "Iterator": {"StartAt": "y", "States": {"y": {"Type": "Fail"}}},
+                config: {"Resource": "arn:x", "Arguments": "{% $foo.bar %}"},
+                "End": True,
+            },
+        },
+        "StartAt": "x",
+    }
+    assert Linter.validate(state_machine) == []
+
+
 def test_empty():
     state_machine = {
         "States": {"x": {"Type": "Map"}},
@@ -588,3 +609,25 @@ def test_tolerated_failure(tolerated_failure, errors):
         "StartAt": "x",
     }
     assert Linter.validate(state_machine) == errors
+
+
+@pytest.mark.parametrize(
+    "config",
+    ["ItemReader", "ResultWriter"],
+)
+def test_ng_arguments(config):
+    state_machine = {
+        "States": {
+            "x": {
+                "Type": "Map",
+                "ItemsPath": "$$.x",
+                "Iterator": {"StartAt": "y", "States": {"y": {"Type": "Fail"}}},
+                config: {"Resource": "arn:x", "Arguments": "{% $foo.bar %}"},
+                "End": True,
+            },
+        },
+        "StartAt": "x",
+    }
+    assert Linter.validate(state_machine) == [
+        f'Field "Arguments" not allowed in State Machine.States.x.{config}'
+    ]

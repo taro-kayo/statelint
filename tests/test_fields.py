@@ -46,3 +46,22 @@ def test_zero_seconds(seconds, problems):
         "States": {"x": {"Type": "Wait", "Seconds": seconds, "End": True}},
     }
     assert Linter.validate(state_machine) == problems
+
+
+@pytest.mark.parametrize("value,expected", [(42, 42), ("xyz", '"xyz"')])
+def test_invalid_jsonata(value, expected):
+    state_machine = {
+        "StartAt": "x",
+        "States": {
+            "x": {
+                "Type": "Task",
+                "QueryLanguage": "JSONata",
+                "Arguments": value,
+                "End": True,
+            }
+        },
+    }
+    assert Linter.validate(state_machine) == [
+        f"State Machine.States.x.Arguments is {expected} but should be a JSONata "
+        "(Object or String)"
+    ]

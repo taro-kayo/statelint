@@ -6,6 +6,7 @@ from ..problem import Problem
 from .container_state import ContainerState
 from .factory import NodeFactory
 from .mixins import (
+    ArgumentsMixin,
     AssignMixin,
     CatchMixin,
     NextXorEndMixin,
@@ -30,6 +31,7 @@ class ParallelState(
     RetryMixin,
     OutputMixin,
     AssignMixin,
+    ArgumentsMixin,
     State,
 ):
     def __init__(

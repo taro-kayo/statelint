@@ -9,6 +9,7 @@ from ..fields import (
     OneOfField,
 )
 from .mixins import (
+    ArgumentsMixin,
     AssignMixin,
     CatchMixin,
     NextXorEndMixin,
@@ -32,6 +33,7 @@ class TaskState(
     RetryMixin,
     OutputMixin,
     AssignMixin,
+    ArgumentsMixin,
     State,
 ):
     @property

@@ -4,6 +4,7 @@ from .base import Field
 from .bool_field import BoolField as _BoolField
 from .common import QueryLanguage, StateType
 from .container import OneOfField
+from .jsonata_field import JSONataField as _JSONataField
 from .list_field import ListField as _ListField
 from .list_field import NonEmptyListField as _NonEmptyListField
 from .num_field import FloatField as _FloatField
@@ -59,6 +60,7 @@ INPUT_PATH = _NullableStrField("InputPath")
 OUTPUT_PATH = _NullableStrField("OutputPath")
 
 RESOURCE = _UriField("Resource")
+ARGUMENTS = _JSONataField("Arguments")
 
 CATCH = _ListField("Catch", _ObjectField)
 RETRY = _ListField("Retry", _ObjectField)
