@@ -53,6 +53,7 @@ def test_null():
         ("jsonata-1.json"),
         ("jsonata-2.json"),
         ("jsonata-3.json"),
+        ("jsonata-4.json"),
     ],
 )
 def test_valid_json(filepath):

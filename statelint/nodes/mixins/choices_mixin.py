@@ -7,6 +7,7 @@ from ...fields import (
     BOOLEAN_EQUALS,
     BOOLEAN_EQUALS_PATH,
     CHOICES,
+    CONDITION,
     DEFAULT,
     IS_BOOLEAN,
     IS_NULL,
@@ -51,9 +52,12 @@ from ...fields import (
     VARIABLE,
     Field,
     OneOfField,
+    QueryLanguage,
 )
 from ...problem import Problem
 from ..node import NameAndPath, Node
+from .assign_mixin import AssignMixin
+from .output_mixin import OutputMixin
 
 COMPARISONS = OneOfField(
     STRING_EQUALS,
@@ -98,10 +102,19 @@ COMPARISONS = OneOfField(
 )
 
 
-class BaseChoiceRule(Node, ABC):
+class BaseChoiceRule(OutputMixin, AssignMixin, ABC):
+    @property
+    def required_fields(self) -> List[Field]:
+        fields = super().required_fields
+        if self.query_language == QueryLanguage.JSONata:
+            return [*fields, CONDITION]
+        return fields
+
     @property
     def optional_fields(self) -> List[Field]:
         fields = super().optional_fields
+        if self.query_language == QueryLanguage.JSONata:
+            return fields
         if VARIABLE.name in self._state:
             return [*fields, VARIABLE, COMPARISONS]
         return [*fields, AND, OR, NOT]

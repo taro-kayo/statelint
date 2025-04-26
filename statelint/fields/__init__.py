@@ -72,6 +72,7 @@ JITTER_STRATEGY = _EnumStrField("JitterStrategy", ["FULL", "NONE"])
 
 CHOICES = _NonEmptyListField("Choices", _ObjectField)
 DEFAULT = _StrField("Default")
+CONDITION = _StrField("Condition")
 
 AND = _NonEmptyListField("And", _ObjectField)
 OR = _NonEmptyListField("Or", _ObjectField)
