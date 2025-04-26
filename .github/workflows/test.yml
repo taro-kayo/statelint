@@ -18,10 +18,10 @@ jobs:
             python: 3.9
             type: test-only
           - os: ubuntu-latest
-            python: 3.12
+            python: 3.13
             type: all
           - os: windows-latest
-            python: 3.12
+            python: 3.13
             type: test-only
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
