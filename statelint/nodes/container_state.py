@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from typing import Any, Dict, List, Optional, Set
 
-from ..fields import END, NEXT, START_AT, STATES, TYPE, Field, StateType
+from ..fields import END, NEXT, START_AT, STATES, TYPE, Field, QueryLanguage, StateType
 from ..problem import Problem
 from .factory import NodeFactory
 from .node import NameAndPath, Node, StatePath
@@ -9,9 +9,13 @@ from .node import NameAndPath, Node, StatePath
 
 class ContainerState(Node):
     def __init__(
-        self, node_factory: NodeFactory, state_path: StatePath, state: Dict[str, Any]
+        self,
+        node_factory: NodeFactory,
+        state_path: StatePath,
+        state: Dict[str, Any],
+        current_query_language: QueryLanguage,
     ) -> None:
-        super().__init__(state_path, state)
+        super().__init__(state_path, state, current_query_language)
         self._node_factory = node_factory
         self._states = self._collect_states()
 
@@ -21,7 +25,9 @@ class ContainerState(Node):
         if isinstance(states, dict):
             for state_name, state in states.items():
                 validator = self._node_factory.get(
-                    self.state_path.make_child(STATES, state_name), state
+                    self,
+                    self.state_path.make_child(STATES, state_name),
+                    state,
                 )
                 if validator:
                     ret_dict[state_name] = validator

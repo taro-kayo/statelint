@@ -1,19 +1,21 @@
 from typing import Any, List
 
-from ...fields import ASSIGN, CATCH, ERROR_EQUALS, NEXT, OUTPUT, Field
+from ...fields import ASSIGN, CATCH, ERROR_EQUALS, NEXT, Field
 from ...problem import Problem
 from ..node import NameAndPath, Node
+from .assign_mixin import AssignMixin
+from .output_mixin import OutputMixin
 from .result_path_mixin import ResultPathMixin
 
 
-class Catcher(ResultPathMixin, Node):
+class Catcher(ResultPathMixin, OutputMixin, AssignMixin, Node):
     @property
     def required_fields(self) -> List[Field]:
         return [*super().required_fields, ERROR_EQUALS, NEXT]
 
     @property
     def optional_fields(self) -> List[Field]:
-        return [*super().optional_fields, OUTPUT, ASSIGN]
+        return [*super().optional_fields, ASSIGN]
 
 
 class CatchMixin(Node):
@@ -33,7 +35,7 @@ class CatchMixin(Node):
                 for idx, element in enumerate(catchers)
                 if isinstance(element, dict)
                 for p in Catcher(
-                    self.state_path.make_child(CATCH, idx), element
+                    self.state_path.make_child(CATCH, idx), element, self.query_language
                 ).validate()
             ]
             + self._validate_error_equals(catchers)

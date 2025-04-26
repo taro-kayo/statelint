@@ -127,7 +127,7 @@ class BaseChoiceRule(Node, ABC):
     def _validate_child(self, field_name: str, child: Any) -> List[Problem]:
         if isinstance(child, dict):
             return NestedChoiceRule(
-                self.state_path.make_child(field_name), child
+                self.state_path.make_child(field_name), child, self.query_language
             ).validate()
         return []
 
@@ -158,7 +158,9 @@ class ChoicesMixin(Node):
             for idx, element in enumerate(self._state[CHOICES.name])
             if isinstance(element, dict)
             for p in ChoiceRule(
-                self.state_path.make_child(CHOICES.name, idx), element
+                self.state_path.make_child(CHOICES.name, idx),
+                element,
+                self.query_language,
             ).validate()
         ]
 

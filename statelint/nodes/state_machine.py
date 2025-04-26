@@ -1,6 +1,6 @@
 from typing import Any, Dict, List
 
-from ..fields import QUERY_LANGUAGE, VERSION, Field
+from ..fields import QUERY_LANGUAGE, VERSION, Field, QueryLanguage
 from .container_state import ContainerState
 from .factory import NodeFactory
 from .mixins import TimeoutSecondsMixin
@@ -9,7 +9,9 @@ from .node import StatePath
 
 class StateMachine(TimeoutSecondsMixin, ContainerState):
     def __init__(self, node_factory: NodeFactory, state: Dict[str, Any]) -> None:
-        super().__init__(node_factory, StatePath("State Machine"), state)
+        super().__init__(
+            node_factory, StatePath("State Machine"), state, QueryLanguage.JSONPath
+        )
 
     @property
     def optional_fields(self) -> List[Field]:

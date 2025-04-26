@@ -1,5 +1,4 @@
 {
-    "QueryLanguage": "JSONPath",
     "StartAt": "JSONPath state",
     "States": {
         "JSONPath state": {

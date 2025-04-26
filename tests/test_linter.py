@@ -26,11 +26,19 @@ def test_invalid_jsonata_1_file():
     ]
 
 
-def test_invalid_jsonata_2_file():
-    file_path = get_path("invalid-jsonata-2.json")
+@pytest.mark.parametrize(
+    "filename",
+    [
+        ("invalid-jsonata-2.json"),
+        ("invalid-jsonata-3.json"),
+    ],
+)
+def test_invalid_jsonata_2_3_file(filename):
+    file_path = get_path(filename)
     assert Linter.validate(file_path) == [
-        'State Machine.States.JSONPath state.Assign is "$.transaction.total" but '
-        "should be an Object"
+        'Field "Assign" not allowed in State Machine.States.JSONPath state',
+        'Field "Output" not allowed in State Machine.States.JSONPath state',
+        'State Machine.States.JSONata state.Assign is "XXX" but should be an Object',
     ]
 
 

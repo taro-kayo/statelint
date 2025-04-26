@@ -1,7 +1,7 @@
 import itertools
 from typing import Any, Dict, List
 
-from ..fields import BRANCHES, Field
+from ..fields import BRANCHES, Field, QueryLanguage
 from ..problem import Problem
 from .container_state import ContainerState
 from .factory import NodeFactory
@@ -33,9 +33,13 @@ class ParallelState(
     State,
 ):
     def __init__(
-        self, node_factory: NodeFactory, state_path: StatePath, state: Dict[str, Any]
+        self,
+        node_factory: NodeFactory,
+        state_path: StatePath,
+        state: Dict[str, Any],
+        current_query_language: QueryLanguage,
     ) -> None:
-        super().__init__(state_path, state)
+        super().__init__(state_path, state, current_query_language)
         self._node_factory = node_factory
         self._branches = self._get_branches(state)
 
@@ -48,6 +52,7 @@ class ParallelState(
                 self._node_factory,
                 self.state_path.make_child(BRANCHES, idx),
                 element,
+                self.query_language,
             )
             for idx, element in enumerate(state[BRANCHES.name])
             if isinstance(element, dict)

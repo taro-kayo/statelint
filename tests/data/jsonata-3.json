@@ -3,6 +3,7 @@
     "States": {
         "p": {
             "Type": "Task",
+            "QueryLanguage": "JSONata",
             "Resource": "foo:bar",
             "End": true,
             "Catch": [

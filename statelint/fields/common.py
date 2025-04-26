@@ -62,5 +62,22 @@ class StateType(str, Enum):
     MAP = "Map"
 
 
+class QueryLanguage(str, Enum):
+    def __str__(self) -> str:
+        return self.value
+
+    @staticmethod
+    def of(value: str) -> "QueryLanguage":
+        if value == "JSONata":
+            return QueryLanguage.JSONata
+        if value == "JSONPath":
+            return QueryLanguage.JSONPath
+        return QueryLanguage.Unknown
+
+    JSONata = "JSONata"
+    JSONPath = "JSONPath"
+    Unknown = "Unknown"
+
+
 def to_json(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False)

@@ -23,6 +23,7 @@ from ..fields import (
     TOLERATED_FAILURE_PERCENTAGE,
     TOLERATED_FAILURE_PERCENTAGE_PATH,
     Field,
+    QueryLanguage,
 )
 from ..fields.container import OneOfField
 from ..problem import Problem
@@ -70,7 +71,9 @@ class ItemReader(MapConfig):
 
         return (
             problems
-            + ReaderConfig(self.state_path.make_child(READER_CONFIG), config).validate()
+            + ReaderConfig(
+                self.state_path.make_child(READER_CONFIG), config, self.query_language
+            ).validate()
         )
 
 
@@ -107,9 +110,13 @@ class MapState(
     State,
 ):
     def __init__(
-        self, node_factory: NodeFactory, state_path: StatePath, state: Dict[str, Any]
+        self,
+        node_factory: NodeFactory,
+        state_path: StatePath,
+        state: Dict[str, Any],
+        current_query_language: QueryLanguage,
     ) -> None:
-        super().__init__(state_path, state)
+        super().__init__(state_path, state, current_query_language)
         self._node_factory = node_factory
         self._iterator = self._get_iterator(state)
         self._validators = (
@@ -153,32 +160,46 @@ class MapState(
         item_processor = state.get(ITEM_PROCESSOR.name)
         if isinstance(iterator, dict):
             return ContainerState(
-                self._node_factory, self.state_path.make_child(ITERATOR), iterator
+                self._node_factory,
+                self.state_path.make_child(ITERATOR),
+                iterator,
+                self.query_language,
             )
         if isinstance(item_processor, dict):
             return ItemProcessor(
                 self._node_factory,
                 self.state_path.make_child(ITEM_PROCESSOR),
                 item_processor,
+                self.query_language,
             )
         return None
 
     def _get_item_reader(self, state: Dict[str, Any]) -> Optional[ItemReader]:
         item_reader = state.get(ITEM_READER.name)
         if isinstance(item_reader, dict):
-            return ItemReader(self.state_path.make_child(ITEM_READER), item_reader)
+            return ItemReader(
+                self.state_path.make_child(ITEM_READER),
+                item_reader,
+                self.query_language,
+            )
         return None
 
     def _get_result_writer(self, state: Dict[str, Any]) -> Optional[ResultWriter]:
         result_writer = state.get(RESULT_WRITER.name)
         if isinstance(result_writer, dict):
             return ResultWriter(
-                self.state_path.make_child(RESULT_WRITER), result_writer
+                self.state_path.make_child(RESULT_WRITER),
+                result_writer,
+                self.query_language,
             )
         return None
 
     def _get_item_batcher(self, state: Dict[str, Any]) -> Optional[ItemBatcher]:
         item_batcher = state.get(ITEM_BATCHER.name)
         if isinstance(item_batcher, dict):
-            return ItemBatcher(self.state_path.make_child(ITEM_BATCHER), item_batcher)
+            return ItemBatcher(
+                self.state_path.make_child(ITEM_BATCHER),
+                item_batcher,
+                self.query_language,
+            )
         return None

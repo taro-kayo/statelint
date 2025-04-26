@@ -1,8 +1,8 @@
 import functools
 from collections import OrderedDict
-from typing import Any, Dict, List, NamedTuple, Union
+from typing import Any, Dict, List, NamedTuple, Optional, Union
 
-from ..fields import COMMENT, Field, ProblemPredicate
+from ..fields import COMMENT, QUERY_LANGUAGE, Field, ProblemPredicate, QueryLanguage
 from ..problem import Problem
 
 StatePathType = Union[str, int, Field]
@@ -45,13 +45,27 @@ class StatePath:
         return Problem(f"{self}{predicate}", predicate.type)
 
 
+def _get_query_language(state: Dict[str, Any]) -> Optional[QueryLanguage]:
+    raw_query_language = state.get(QUERY_LANGUAGE.name)
+    if raw_query_language:
+        return QueryLanguage.of(raw_query_language)
+    return None
+
+
 class Node:
     state_path: StatePath
     _state: Dict[str, Any]
+    _query_language: QueryLanguage
 
-    def __init__(self, state_path: StatePath, state: Dict[str, Any]) -> None:
+    def __init__(
+        self,
+        state_path: StatePath,
+        state: Dict[str, Any],
+        current_query_language: QueryLanguage,
+    ) -> None:
         self.state_path = state_path
         self._state = state
+        self._query_language = _get_query_language(state) or current_query_language
 
     def __str__(self) -> str:
         return self.__repr__()
@@ -66,6 +80,10 @@ class Node:
     @property
     def optional_fields(self) -> List[Field]:
         return [COMMENT]
+
+    @property
+    def query_language(self) -> QueryLanguage:
+        return self._query_language
 
     @property
     def forbidden_fields(self) -> List[Field]:

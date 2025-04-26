@@ -2,7 +2,7 @@ from ..problem import ProblemPredicate
 from .any_field import AnyField as _AnyField
 from .base import Field
 from .bool_field import BoolField as _BoolField
-from .common import StateType
+from .common import QueryLanguage, StateType
 from .container import OneOfField
 from .list_field import ListField as _ListField
 from .list_field import NonEmptyListField as _NonEmptyListField
