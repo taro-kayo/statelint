@@ -5,8 +5,8 @@
     "group:allNonMajor"
   ],
   "pip_requirements": {
-    "fileMatch": [
-      "^requirements/.+\\.txt$"
+    "managerFilePatterns": [
+      "/^requirements/.+\\.txt$/"
     ]
   },
   "pre-commit": {
