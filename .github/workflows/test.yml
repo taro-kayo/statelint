@@ -14,10 +14,10 @@ jobs:
             python: "3.10"
             type: test-only
           - os: ubuntu-latest
-            python: "3.13"
+            python: "3.14"
             type: all
           - os: windows-latest
-            python: "3.13"
+            python: "3.14"
             type: test-only
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
