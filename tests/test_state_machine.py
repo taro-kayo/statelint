@@ -110,6 +110,6 @@ def test_null_state():
 
 def test_repr():
     assert (
-        f'{StateMachine(Mock(), {"x": 42},Config())}'
+        f'{StateMachine(Mock(), {"x": 42}, Config())}'
         == "StateMachine(State Machine, {'x': 42})"
     )
