@@ -145,7 +145,7 @@ class Node:
             if field in fields
             for problem in fields[field].validate(
                 FieldValue(
-                    value=value,
+                    raw_value=value,
                     variables=self.variables,
                     query_language=self.query_language,
                     config=self._config,

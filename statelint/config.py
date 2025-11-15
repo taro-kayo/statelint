@@ -6,6 +6,7 @@ from .problem import ProblemType
 class Config:
     ignored_problem_types: set[ProblemType]
     is_yaml: bool
+    evaluate_jsonata: bool
 
     @property
     def input_type(self) -> str:
@@ -15,6 +16,8 @@ class Config:
         self,
         ignored_problem_types: Optional[set[ProblemType]] = None,
         yaml: bool = False,
+        evaluate_jsonata: bool = False,
     ):
         self.ignored_problem_types = ignored_problem_types or set()
         self.is_yaml = yaml
+        self.evaluate_jsonata = evaluate_jsonata

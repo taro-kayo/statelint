@@ -1,7 +1,7 @@
-import re
 from typing import Callable
 
 from ..problem import ProblemPredicate, ProblemType
+from ..utils.jsonata_helper import is_jsonata_value
 from .base import Field
 from .common import to_json
 from .field_value import FieldValue
@@ -20,7 +20,7 @@ class JSONataField(Field):
             return []
         value = field_value.value
         if not self._str_field.validate(field_value):
-            if re.match(r"\{%.+%\}", value):
+            if is_jsonata_value(value):
                 return []
 
         problem_type = ProblemType.JSONata

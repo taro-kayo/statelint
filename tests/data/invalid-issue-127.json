@@ -1,0 +1,39 @@
+{
+    "StartAt": "InitVars",
+    "States": {
+        "InitVars": {
+            "Type": "Pass",
+            "Assign": {
+                "lambdaArn": "arn:x",
+                "maxConcurrency": "5"
+            },
+            "Output": "{% $states.result.Payload %}",
+            "Next": "MapState"
+        },
+        "MapState": {
+            "Type": "Map",
+            "ItemProcessor": {
+                "ProcessorConfig": {
+                    "Mode": "INLINE"
+                },
+                "StartAt": "MyFunction",
+                "States": {
+                    "MyFunction": {
+                        "Type": "Task",
+                        "Resource": "arn:aws:states:::lambda:invoke",
+                        "Output": "{% $states.result.Payload %}",
+                        "Arguments": {
+                            "FunctionName": "{% $lambdaArn %}",
+                            "Payload": "{% $states.input %}"
+                        },
+                        "End": true
+                    }
+                }
+            },
+            "MaxConcurrency": "{% $number($maxConcurrency) %}",
+            "Items": "{% $states.input.map_data %}",
+            "End": true
+        }
+    },
+    "QueryLanguage": "JSONata"
+}

@@ -10,7 +10,7 @@ from statelint.fields.pattern_field import JsonPathField, RefPathField
 
 def as_field_value(value: Any) -> FieldValue:
     return FieldValue(
-        value=value,
+        raw_value=value,
         variables={},
         query_language=QueryLanguage.JSONPath,
         config=Config(),
