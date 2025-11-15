@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from typing import Any, Optional
 
-from ..fields import END, NEXT, START_AT, STATES, TYPE, Field, QueryLanguage, StateType
+from ..fields import ASSIGN, END, NEXT, START_AT, STATES, TYPE, Field, StateType
 from ..problem import Problem
 from .factory import NodeFactory
 from .node import NameAndPath, Node, StatePath
@@ -13,10 +13,14 @@ class ContainerState(Node):
         node_factory: NodeFactory,
         state_path: StatePath,
         state: dict[str, Any],
-        current_query_language: QueryLanguage,
+        parent: Node | None,
     ) -> None:
-        super().__init__(state_path, state, current_query_language)
+        super().__init__(state_path, state, parent)
         self._node_factory = node_factory
+        self._variable_scopes = [
+            *(parent.variable_scopes if parent else []),
+            self._collect_variables(state),
+        ]
         self._states = self._collect_states()
 
     def _collect_states(self) -> dict[str, Node]:
@@ -32,6 +36,21 @@ class ContainerState(Node):
                 if validator:
                     ret_dict[state_name] = validator
         return ret_dict
+
+    @staticmethod
+    def _collect_variables(this: dict[str, Any]) -> dict[str, Any]:
+        states = this.get(STATES.name)
+        if not isinstance(states, dict):
+            return {}
+
+        return dict(
+            variables
+            for node in states.values()
+            if isinstance(node, dict)
+            for assign in [node.get(ASSIGN.name)]
+            if isinstance(assign, dict)
+            for variables in assign.items()
+        )
 
     @property
     def required_fields(self) -> list[Field]:

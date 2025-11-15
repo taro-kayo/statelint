@@ -57,17 +57,16 @@ def _get_query_language(state: dict[str, Any]) -> Optional[QueryLanguage]:
 class Node:
     state_path: StatePath
     _state: dict[str, Any]
-    _query_language: QueryLanguage
 
     def __init__(
-        self,
-        state_path: StatePath,
-        state: dict[str, Any],
-        current_query_language: QueryLanguage,
+        self, state_path: StatePath, state: dict[str, Any], parent: Node | None
     ) -> None:
         self.state_path = state_path
         self._state = state
-        self._query_language = _get_query_language(state) or current_query_language
+        self._query_language = _get_query_language(state) or (
+            parent.query_language if parent else QueryLanguage.JSONPath
+        )
+        self._variable_scopes = parent.variable_scopes if parent else []
 
     def __str__(self) -> str:
         return self.__repr__()
@@ -86,6 +85,10 @@ class Node:
     @property
     def query_language(self) -> QueryLanguage:
         return self._query_language
+
+    @property
+    def variable_scopes(self) -> list[dict[str, Any]]:
+        return self._variable_scopes
 
     @property
     def forbidden_fields(self) -> list[Field]:
