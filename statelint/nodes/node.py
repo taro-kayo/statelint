@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import functools
 from collections import OrderedDict
 from typing import Any, NamedTuple, Optional, Union
@@ -10,7 +12,7 @@ StatePathType = Union[str, int, Field]
 
 class NameAndPath(NamedTuple):
     name: str
-    path: "StatePath"
+    path: StatePath
 
 
 class StatePath:
@@ -35,10 +37,10 @@ class StatePath:
         return f".{path}"
 
     @property
-    def parent(self) -> "StatePath":
+    def parent(self) -> StatePath:
         return StatePath(self._root, *self._paths[:-1])
 
-    def make_child(self, *paths: StatePathType) -> "StatePath":
+    def make_child(self, *paths: StatePathType) -> StatePath:
         return StatePath(self._root, *self._paths, *paths)
 
     def make_problem(self, predicate: ProblemPredicate) -> Problem:
