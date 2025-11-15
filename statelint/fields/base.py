@@ -1,5 +1,4 @@
 from abc import ABC
-from typing import Union
 
 from ..problem import ProblemPredicate, ProblemType
 from .common import to_json
@@ -24,7 +23,7 @@ class Field(ABC):
     @staticmethod
     def check_type(
         field_value: FieldValue,
-        _type: Union[type, tuple[type, ...]],
+        _type: type | tuple[type, ...],
         problem_type: ProblemType,
     ) -> list[ProblemPredicate]:
         value = field_value.value

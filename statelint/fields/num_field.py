@@ -1,6 +1,6 @@
 import operator
 from abc import ABC, abstractmethod
-from typing import Optional, Union
+from typing import Optional
 
 from ..problem import ProblemPredicate, ProblemType
 from .base import Field, NonNullMixin
@@ -30,7 +30,7 @@ class BaseNumericField(NonNullMixin, Field, ABC):
 
     @property
     @abstractmethod
-    def raw_type(self) -> Union[type, tuple[type, ...]]:
+    def raw_type(self) -> type | tuple[type, ...]:
         pass  # pragma: no cover
 
     def validate(self, field_value: FieldValue) -> list[ProblemPredicate]:
@@ -59,7 +59,7 @@ class IntegerField(BaseNumericField):
         return ProblemType.INTEGER
 
     @property
-    def raw_type(self) -> Union[type, tuple[type, ...]]:
+    def raw_type(self) -> type | tuple[type, ...]:
         return int
 
 
@@ -69,7 +69,7 @@ class FloatField(BaseNumericField):
         return ProblemType.FLOAT
 
     @property
-    def raw_type(self) -> Union[type, tuple[type, ...]]:
+    def raw_type(self) -> type | tuple[type, ...]:
         return float
 
 
@@ -79,5 +79,5 @@ class NumericField(BaseNumericField):
         return ProblemType.NUMERIC
 
     @property
-    def raw_type(self) -> Union[type, tuple[type, ...]]:
+    def raw_type(self) -> type | tuple[type, ...]:
         return int, float

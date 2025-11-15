@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import functools
 from collections import OrderedDict
-from typing import Any, NamedTuple, Optional, Union
+from typing import Any, NamedTuple, Optional
 
 from ..config import Config
 from ..fields import (
@@ -15,7 +15,7 @@ from ..fields import (
 )
 from ..problem import Problem
 
-StatePathType = Union[str, int, Field]
+StatePathType = str | int | Field
 
 
 class NameAndPath(NamedTuple):
