@@ -1,6 +1,7 @@
 from collections import OrderedDict
 from typing import Any, Optional
 
+from ..config import Config
 from ..fields import ASSIGN, END, NEXT, START_AT, STATES, TYPE, Field, StateType
 from ..problem import Problem
 from .factory import NodeFactory
@@ -14,8 +15,9 @@ class ContainerState(Node):
         state_path: StatePath,
         state: dict[str, Any],
         parent: Node | None,
+        config: Config | None = None,
     ) -> None:
-        super().__init__(state_path, state, parent)
+        super().__init__(state_path, state, parent, config)
         self._node_factory = node_factory
         self._variable_scopes = [
             *(parent.variable_scopes if parent else []),

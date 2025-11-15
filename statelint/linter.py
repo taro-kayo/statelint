@@ -33,7 +33,7 @@ class Linter:
 
         problems = [
             p
-            for p in StateMachine(StateFactory(), parsed).validate()
+            for p in StateMachine(StateFactory(), parsed, config).validate()
             if p.type not in config.ignored_problem_types
         ]
 

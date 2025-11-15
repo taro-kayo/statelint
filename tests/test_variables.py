@@ -1,3 +1,4 @@
+from statelint.config import Config
 from statelint.nodes.factory.factory import StateFactory
 from statelint.nodes.map_state import MapState
 from statelint.nodes.state_machine import StateMachine
@@ -5,7 +6,7 @@ from statelint.nodes.state_machine import StateMachine
 
 def test_no_variable():
     sm = StateMachine(
-        StateFactory(), {"States": {"x": {"Type": "Succeed"}}, "StartAt": "x"}
+        StateFactory(), {"States": {"x": {"Type": "Succeed"}}, "StartAt": "x"}, Config()
     )
     assert sm.validate() == []
     assert sm.variable_scopes == [{}]
@@ -23,6 +24,7 @@ def test_child_variable():
             },
             "StartAt": "x",
         },
+        Config(),
     )
     assert sm.validate() == []
     assert sm.variable_scopes == [variables]
@@ -55,6 +57,7 @@ def test_nest():
             },
             "StartAt": "x",
         },
+        Config(),
     )
     assert sm.validate() == []
     assert sm.variable_scopes == [variables_in_parent]

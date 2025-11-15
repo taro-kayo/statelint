@@ -4,6 +4,7 @@ import functools
 from collections import OrderedDict
 from typing import Any, NamedTuple, Optional, Union
 
+from ..config import Config
 from ..fields import (
     COMMENT,
     QUERY_LANGUAGE,
@@ -64,9 +65,14 @@ def _get_query_language(state: dict[str, Any]) -> Optional[QueryLanguage]:
 class Node:
     state_path: StatePath
     _state: dict[str, Any]
+    _config: Config
 
     def __init__(
-        self, state_path: StatePath, state: dict[str, Any], parent: Node | None
+        self,
+        state_path: StatePath,
+        state: dict[str, Any],
+        parent: Node | None,
+        config: Config | None = None,
     ) -> None:
         self.state_path = state_path
         self._state = state
@@ -74,6 +80,9 @@ class Node:
             parent.query_language if parent else QueryLanguage.JSONPath
         )
         self._variable_scopes = parent.variable_scopes if parent else []
+        maybe_config = parent._config if parent else config
+        assert maybe_config
+        self._config = maybe_config
 
     def __str__(self) -> str:
         return self.__repr__()
@@ -139,6 +148,7 @@ class Node:
                     value=value,
                     variables=self.variables,
                     query_language=self.query_language,
+                    config=self._config,
                 )
             )
         ]

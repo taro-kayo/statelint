@@ -2,13 +2,19 @@ from typing import Any
 
 import pytest
 
+from statelint.config import Config
 from statelint.fields.common import QueryLanguage
 from statelint.fields.field_value import FieldValue
 from statelint.fields.pattern_field import JsonPathField, RefPathField
 
 
 def as_field_value(value: Any) -> FieldValue:
-    return FieldValue(value=value, variables={}, query_language=QueryLanguage.JSONPath)
+    return FieldValue(
+        value=value,
+        variables={},
+        query_language=QueryLanguage.JSONPath,
+        config=Config(),
+    )
 
 
 @pytest.mark.parametrize(
