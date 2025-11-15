@@ -80,6 +80,7 @@ class Node:
             parent.query_language if parent else QueryLanguage.JSONPath
         )
         self._variable_scopes = parent.variable_scopes if parent else []
+        # TODO: This is a bit hacky implementation; needs a structural refactoring.
         maybe_config = parent._config if parent else config
         assert maybe_config
         self._config = maybe_config
