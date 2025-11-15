@@ -1,16 +1,26 @@
+from __future__ import annotations
+
 import functools
 from collections import OrderedDict
-from typing import Any, NamedTuple, Optional, Union
+from typing import Any, NamedTuple, Optional
 
-from ..fields import COMMENT, QUERY_LANGUAGE, Field, ProblemPredicate, QueryLanguage
+from ..config import Config
+from ..fields import (
+    COMMENT,
+    QUERY_LANGUAGE,
+    Field,
+    FieldValue,
+    ProblemPredicate,
+    QueryLanguage,
+)
 from ..problem import Problem
 
-StatePathType = Union[str, int, Field]
+StatePathType = str | int | Field
 
 
 class NameAndPath(NamedTuple):
     name: str
-    path: "StatePath"
+    path: StatePath
 
 
 class StatePath:
@@ -35,10 +45,10 @@ class StatePath:
         return f".{path}"
 
     @property
-    def parent(self) -> "StatePath":
+    def parent(self) -> StatePath:
         return StatePath(self._root, *self._paths[:-1])
 
-    def make_child(self, *paths: StatePathType) -> "StatePath":
+    def make_child(self, *paths: StatePathType) -> StatePath:
         return StatePath(self._root, *self._paths, *paths)
 
     def make_problem(self, predicate: ProblemPredicate) -> Problem:
@@ -55,17 +65,25 @@ def _get_query_language(state: dict[str, Any]) -> Optional[QueryLanguage]:
 class Node:
     state_path: StatePath
     _state: dict[str, Any]
-    _query_language: QueryLanguage
+    _config: Config
 
     def __init__(
         self,
         state_path: StatePath,
         state: dict[str, Any],
-        current_query_language: QueryLanguage,
+        parent: Node | None,
+        config: Config | None = None,
     ) -> None:
         self.state_path = state_path
         self._state = state
-        self._query_language = _get_query_language(state) or current_query_language
+        self._query_language = _get_query_language(state) or (
+            parent.query_language if parent else QueryLanguage.JSONPath
+        )
+        self._variable_scopes = parent.variable_scopes if parent else []
+        # TODO: This is a bit hacky implementation; needs a structural refactoring.
+        maybe_config = parent._config if parent else config
+        assert maybe_config
+        self._config = maybe_config
 
     def __str__(self) -> str:
         return self.__repr__()
@@ -84,6 +102,14 @@ class Node:
     @property
     def query_language(self) -> QueryLanguage:
         return self._query_language
+
+    @property
+    def variable_scopes(self) -> list[dict[str, Any]]:
+        return self._variable_scopes
+
+    @property
+    def variables(self) -> dict[str, Any]:
+        return {k: v for d in self.variable_scopes for k, v in d.items()}
 
     @property
     def forbidden_fields(self) -> list[Field]:
@@ -118,7 +144,14 @@ class Node:
             self.state_path.make_child(field).make_problem(problem)
             for field, value in self._state.items()
             if field in fields
-            for problem in fields[field].validate(value)
+            for problem in fields[field].validate(
+                FieldValue(
+                    raw_value=value,
+                    variables=self.variables,
+                    query_language=self.query_language,
+                    config=self._config,
+                )
+            )
         ]
 
     def _validate_forbidden_fields(self) -> list[Problem]:

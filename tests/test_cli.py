@@ -112,6 +112,13 @@ def test_default_argv(mocked_print):
 
 
 @mock.patch("builtins.print")
+@mock.patch("statelint.cli.importlib.import_module")
+def test_jsonata_not_installed(import_module, *_):
+    import_module.side_effect = ImportError()
+    assert main(["{}", "--eval-jsonata"]) == 2
+
+
+@mock.patch("builtins.print")
 def test_multiple_input(mocked_print):
     args = ['{"Comment":"1"}', "{}"]
     assert main(args) == 1
@@ -127,3 +134,29 @@ def test_multiple_input(mocked_print):
             for arg in args
         )
     )
+
+
+@pytest.mark.parametrize(
+    "flags,exit_code,print_calls",
+    [
+        (["--eval-jsonata"], 0, []),
+        (
+            [],
+            1,
+            [
+                call("One error:"),
+                call(
+                    " State Machine.States.MapState.MaxConcurrency is "
+                    '"{% $number($maxConcurrency) %}" but should be numeric'
+                ),
+            ],
+        ),
+    ],
+)
+@mock.patch("builtins.print")
+def test_eval_jsonata(mocked_print, flags, exit_code, print_calls):
+    file_path = os.path.join(
+        os.path.dirname(__file__), "data", "invalid-issue-127.json"
+    )
+    assert main([file_path, *flags]) == exit_code
+    assert mocked_print.mock_calls == print_calls

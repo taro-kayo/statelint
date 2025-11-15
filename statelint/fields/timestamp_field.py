@@ -1,17 +1,17 @@
-from typing import Any
-
 from dateutil import parser
 
 from ..problem import ProblemPredicate
 from .base import Field, NonNullMixin
 from .common import to_json
+from .field_value import FieldValue
 
 
 class TimestampField(NonNullMixin, Field):
-    def validate(self, value: Any) -> list[ProblemPredicate]:
-        problems = super().validate(value)
+    def validate(self, field_value: FieldValue) -> list[ProblemPredicate]:
+        problems = super().validate(field_value)
         if problems:
             return problems
+        value = field_value.value
         if isinstance(value, str) and _is_rfc3339_format(value):
             return []
 

@@ -1,4 +1,5 @@
 # statelint
+
 <a href="https://github.com/taro-kayo/statelint/actions"><img alt="Actions Status" src="https://github.com/taro-kayo/statelint/workflows/Test/badge.svg"></a>
 <a href="https://coveralls.io/github/taro-kayo/statelint?branch=main"><img alt="Coverage Status" src="https://coveralls.io/repos/github/taro-kayo/statelint/badge.svg?branch=main"></a>
 <a href="https://github.com/taro-kayo/statelint/blob/main/LICENSE"><img alt="License: Apache License 2.0" src="https://img.shields.io/badge/License-Apache_2.0-blue.svg"></a>
@@ -51,4 +52,24 @@ You can pass both parameters at the same time.
 
 ```shell
 statelint --ignore=FLOAT,URI fancy-state-machine-spec.json
+```
+
+## 🚀 JSONata Evaluation (Experimental)
+
+If you are using [JSONata](https://docs.aws.amazon.com/step-functions/latest/dg/transforming-data.html), you may be able to reduce false positives by passing the `--eval-jsonata` flag.
+
+This feature is currently **experimental** (and might just stay that way 😉).
+
+However, this library only references variables assigned in the `"Assign"` field (i.e., $states is not supported) and **does not** support the JSONata format _within_ the `"Assign"` field itself.
+
+To use this feature, you must install [jsonata-python](https://github.com/rayokota/jsonata-python):
+
+```shell
+pip install jsonata-python
+```
+
+### Usage Example:
+
+```shell
+statelint --eval-jsonata fancy-state-machine-spec.json
 ```

@@ -1,7 +1,7 @@
 import itertools
 from typing import Any
 
-from ..fields import BRANCHES, Field, QueryLanguage
+from ..fields import BRANCHES, Field
 from ..problem import Problem
 from .container_state import ContainerState
 from .factory import NodeFactory
@@ -17,7 +17,7 @@ from .mixins import (
     RetryMixin,
     TimeoutSecondsMixin,
 )
-from .node import NameAndPath, StatePath
+from .node import NameAndPath, Node, StatePath
 from .state import State
 
 
@@ -39,9 +39,9 @@ class ParallelState(
         node_factory: NodeFactory,
         state_path: StatePath,
         state: dict[str, Any],
-        current_query_language: QueryLanguage,
+        parent: Node,
     ) -> None:
-        super().__init__(state_path, state, current_query_language)
+        super().__init__(state_path, state, parent)
         self._node_factory = node_factory
         self._branches = self._get_branches(state)
 
@@ -54,7 +54,7 @@ class ParallelState(
                 self._node_factory,
                 self.state_path.make_child(BRANCHES, idx),
                 element,
-                self.query_language,
+                self,
             )
             for idx, element in enumerate(state[BRANCHES.name])
             if isinstance(element, dict)

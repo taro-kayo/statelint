@@ -18,10 +18,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     parser = _make_arg_parser()
     args = parser.parse_args(argv)
-    config = Config(args.ignore, args.yaml)
+    config = Config(args.ignore, args.yaml, args.eval_jsonata)
 
-    if config.is_yaml and not _is_pyyaml_installed():
+    if config.is_yaml and not _is_installed("yaml"):
         print("Missing optional dependency 'PyYAML'.", file=sys.stderr)
+        return 2
+
+    if config.evaluate_jsonata and not _is_installed("jsonata"):
+        print("Missing optional dependency 'jsonata-python'.", file=sys.stderr)
         return 2
 
     all_problems = dict(_get_problems(args.filepath_or_text, config))
@@ -53,9 +57,9 @@ def _get_problems(
             yield filepath_or_text, problems
 
 
-def _is_pyyaml_installed() -> bool:
+def _is_installed(module_name: str) -> bool:
     try:
-        importlib.import_module("yaml")
+        importlib.import_module(module_name)
     except ImportError:
         return False
     return True
@@ -81,6 +85,12 @@ def _make_arg_parser() -> ArgumentParser:
         "--yaml",
         action="store_true",
         help="Parse as YAML instead of JSON.",
+    )
+
+    parser.add_argument(
+        "--eval-jsonata",
+        action="store_true",
+        help="Parse JSONata value if possible.",
     )
 
     parser.add_argument(

@@ -1,5 +1,6 @@
 import pytest
 
+from statelint.config import Config
 from statelint.linter import Linter
 
 from .common import get_path
@@ -59,3 +60,19 @@ def test_null():
 )
 def test_valid_json(filepath):
     assert Linter().validate(get_path(filepath)) == []
+
+
+def test_issue_125_no_eval():
+    assert Linter().validate(get_path("invalid-issue-127.json")) == [
+        'State Machine.States.MapState.MaxConcurrency is "{% '
+        '$number($maxConcurrency) %}" but should be numeric',
+    ]
+
+
+def test_issue_125_eval():
+    assert (
+        Linter().validate(
+            get_path("invalid-issue-127.json"), Config(evaluate_jsonata=True)
+        )
+        == []
+    )

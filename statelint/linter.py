@@ -1,6 +1,6 @@
 import json
 import os.path
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Optional
 
 from .config import Config
 from .nodes.factory.factory import StateFactory
@@ -16,7 +16,7 @@ class ParseError(ValueError):
 class Linter:
     @staticmethod
     def validate(
-        json_str_or_dict_or_file_path: Union[str, dict[str, Any]],
+        json_str_or_dict_or_file_path: str | dict[str, Any],
         config: Optional[Config] = None,
     ) -> list[str]:
         if not config:
@@ -33,7 +33,7 @@ class Linter:
 
         problems = [
             p
-            for p in StateMachine(StateFactory(), parsed).validate()
+            for p in StateMachine(StateFactory(), parsed, config).validate()
             if p.type not in config.ignored_problem_types
         ]
 
@@ -41,7 +41,7 @@ class Linter:
 
 
 def _parse_to_dict(
-    json_str_or_dict_or_file_path: Union[str, Any],
+    json_str_or_dict_or_file_path: str | Any,
     parse_text: Callable[[str], dict[str, Any]],
 ) -> Any:
     if isinstance(json_str_or_dict_or_file_path, dict):

@@ -45,6 +45,6 @@ class RetryMixin(Node):
             for idx, element in enumerate(state[RETRY.name])
             if isinstance(element, dict)
             for p in Retrier(
-                self.state_path.make_child(RETRY, idx), element, self.query_language
+                self.state_path.make_child(RETRY, idx), element, self
             ).validate()
         ]

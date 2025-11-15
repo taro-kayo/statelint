@@ -74,7 +74,7 @@ class ItemReader(MapConfig):
         return (
             problems
             + ReaderConfig(
-                self.state_path.make_child(READER_CONFIG), config, self.query_language
+                self.state_path.make_child(READER_CONFIG), config, self
             ).validate()
         )
 
@@ -116,9 +116,9 @@ class MapState(
         node_factory: NodeFactory,
         state_path: StatePath,
         state: dict[str, Any],
-        current_query_language: QueryLanguage,
+        parent: Node,
     ) -> None:
-        super().__init__(state_path, state, current_query_language)
+        super().__init__(state_path, state, parent)
         self._node_factory = node_factory
         self._iterator = self._get_iterator(state)
         self._validators = (
@@ -173,17 +173,14 @@ class MapState(
         item_processor = state.get(ITEM_PROCESSOR.name)
         if isinstance(iterator, dict):
             return ContainerState(
-                self._node_factory,
-                self.state_path.make_child(ITERATOR),
-                iterator,
-                self.query_language,
+                self._node_factory, self.state_path.make_child(ITERATOR), iterator, self
             )
         if isinstance(item_processor, dict):
             return ItemProcessor(
                 self._node_factory,
                 self.state_path.make_child(ITEM_PROCESSOR),
                 item_processor,
-                self.query_language,
+                self,
             )
         return None
 
@@ -191,9 +188,7 @@ class MapState(
         item_reader = state.get(ITEM_READER.name)
         if isinstance(item_reader, dict):
             return ItemReader(
-                self.state_path.make_child(ITEM_READER),
-                item_reader,
-                self.query_language,
+                self.state_path.make_child(ITEM_READER), item_reader, self
             )
         return None
 
@@ -201,9 +196,7 @@ class MapState(
         result_writer = state.get(RESULT_WRITER.name)
         if isinstance(result_writer, dict):
             return ResultWriter(
-                self.state_path.make_child(RESULT_WRITER),
-                result_writer,
-                self.query_language,
+                self.state_path.make_child(RESULT_WRITER), result_writer, self
             )
         return None
 
@@ -211,8 +204,6 @@ class MapState(
         item_batcher = state.get(ITEM_BATCHER.name)
         if isinstance(item_batcher, dict):
             return ItemBatcher(
-                self.state_path.make_child(ITEM_BATCHER),
-                item_batcher,
-                self.query_language,
+                self.state_path.make_child(ITEM_BATCHER), item_batcher, self
             )
         return None

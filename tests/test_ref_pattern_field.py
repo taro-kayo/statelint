@@ -1,6 +1,20 @@
+from typing import Any
+
 import pytest
 
+from statelint.config import Config
+from statelint.fields.common import QueryLanguage
+from statelint.fields.field_value import FieldValue
 from statelint.fields.pattern_field import JsonPathField, RefPathField
+
+
+def as_field_value(value: Any) -> FieldValue:
+    return FieldValue(
+        raw_value=value,
+        variables={},
+        query_language=QueryLanguage.JSONPath,
+        config=Config(),
+    )
 
 
 @pytest.mark.parametrize(
@@ -39,7 +53,7 @@ from statelint.fields.pattern_field import JsonPathField, RefPathField
 )
 def test_ref_field(text, is_ok):
     field = RefPathField("test")
-    assert (not field.validate(text)) == is_ok
+    assert (not field.validate(as_field_value(text))) == is_ok
 
 
 @pytest.mark.parametrize(
@@ -89,12 +103,12 @@ def test_ref_field(text, is_ok):
 )
 def test_main(text, is_ok):
     field = JsonPathField("test")
-    assert (not field.validate(text)) == is_ok
+    assert (not field.validate(as_field_value(text))) == is_ok
 
 
 def test_message():
     field = JsonPathField("test")
-    assert [p.predicate for p in field.validate("x")] == [
+    assert [p.predicate for p in field.validate(as_field_value("x"))] == [
         ' is "x" but should be a JSONPath'
     ]
 

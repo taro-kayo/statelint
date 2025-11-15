@@ -20,5 +20,7 @@
     ],
     "[github-actions-workflow]": {
         "editor.tabSize": 2
-    }
+    },
+    "python-envs.defaultEnvManager": "ms-python.python:pyenv",
+    "python-envs.pythonProjects": []
 }

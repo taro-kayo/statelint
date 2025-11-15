@@ -2,6 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 
+from statelint.config import Config
 from statelint.linter import Linter
 from statelint.nodes.state_machine import StateMachine
 
@@ -109,5 +110,6 @@ def test_null_state():
 
 def test_repr():
     assert (
-        f'{StateMachine(Mock(), {"x": 42})}' == "StateMachine(State Machine, {'x': 42})"
+        f'{StateMachine(Mock(), {"x": 42}, Config())}'
+        == "StateMachine(State Machine, {'x': 42})"
     )

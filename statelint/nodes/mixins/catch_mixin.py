@@ -35,7 +35,7 @@ class CatchMixin(Node):
                 for idx, element in enumerate(catchers)
                 if isinstance(element, dict)
                 for p in Catcher(
-                    self.state_path.make_child(CATCH, idx), element, self.query_language
+                    self.state_path.make_child(CATCH, idx), element, self
                 ).validate()
             ]
             + self._validate_error_equals(catchers)

@@ -20,20 +20,20 @@ class StateFactory(NodeFactory):
             return None
         state_type = state.get(TYPE.name)
         if state_type == StateType.SUCCEED.value:
-            return SucceedState(state_path, state, parent.query_language)
+            return SucceedState(state_path, state, parent)
         if state_type == StateType.FAIL.value:
-            return FailState(state_path, state, parent.query_language)
+            return FailState(state_path, state, parent)
         if state_type == StateType.PASS.value:
-            return PassState(state_path, state, parent.query_language)
+            return PassState(state_path, state, parent)
         if state_type == StateType.WAIT.value:
-            return WaitState(state_path, state, parent.query_language)
+            return WaitState(state_path, state, parent)
         if state_type == StateType.TASK.value:
-            return TaskState(state_path, state, parent.query_language)
+            return TaskState(state_path, state, parent)
         if state_type == StateType.CHOICE.value:
-            return ChoiceState(state_path, state, parent.query_language)
+            return ChoiceState(state_path, state, parent)
         if state_type == StateType.PARALLEL.value:
-            return ParallelState(self, state_path, state, parent.query_language)
+            return ParallelState(self, state_path, state, parent)
         if state_type == StateType.MAP.value:
-            return MapState(self, state_path, state, parent.query_language)
+            return MapState(self, state_path, state, parent)
 
-        return UnknownState(state_path, state, parent.query_language)
+        return UnknownState(state_path, state, parent)
