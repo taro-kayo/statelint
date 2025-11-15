@@ -112,6 +112,13 @@ def test_default_argv(mocked_print):
 
 
 @mock.patch("builtins.print")
+@mock.patch("statelint.cli.importlib.import_module")
+def test_jsonata_not_installed(import_module, *_):
+    import_module.side_effect = ImportError()
+    assert main(["{}", "--eval-jsonata"]) == 2
+
+
+@mock.patch("builtins.print")
 def test_multiple_input(mocked_print):
     args = ['{"Comment":"1"}', "{}"]
     assert main(args) == 1
