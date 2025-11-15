@@ -10,6 +10,7 @@ from statelint.utils.jsonata_helper import evaluate_jsonata
         ("$value", {"value": 42}, 42),
         ("$number($value)", {"value": "42"}, 42),
         ("$number($value)", {"value": 42}, 42),
+        ("$number($value)", {"value": "A"}, None),
         ("$value(42)", {"value": 42}, None),
     ],
 )
