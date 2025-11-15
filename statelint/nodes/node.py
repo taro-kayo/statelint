@@ -4,7 +4,14 @@ import functools
 from collections import OrderedDict
 from typing import Any, NamedTuple, Optional, Union
 
-from ..fields import COMMENT, QUERY_LANGUAGE, Field, ProblemPredicate, QueryLanguage
+from ..fields import (
+    COMMENT,
+    QUERY_LANGUAGE,
+    Field,
+    FieldValue,
+    ProblemPredicate,
+    QueryLanguage,
+)
 from ..problem import Problem
 
 StatePathType = Union[str, int, Field]
@@ -91,6 +98,10 @@ class Node:
         return self._variable_scopes
 
     @property
+    def variables(self) -> dict[str, Any]:
+        return {k: v for d in self.variable_scopes for k, v in d.items()}
+
+    @property
     def forbidden_fields(self) -> list[Field]:
         # If we just want to validate extra fields, it's enough to put
         # allowed fields to required_fields/optional_fields.
@@ -123,7 +134,13 @@ class Node:
             self.state_path.make_child(field).make_problem(problem)
             for field, value in self._state.items()
             if field in fields
-            for problem in fields[field].validate(value)
+            for problem in fields[field].validate(
+                FieldValue(
+                    value=value,
+                    variables=self.variables,
+                    query_language=self.query_language,
+                )
+            )
         ]
 
     def _validate_forbidden_fields(self) -> list[Problem]:

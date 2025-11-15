@@ -1,8 +1,9 @@
 from abc import ABC
-from typing import Any, Union
+from typing import Union
 
 from ..problem import ProblemPredicate, ProblemType
 from .common import to_json
+from .field_value import FieldValue
 
 
 class Field(ABC):
@@ -17,13 +18,16 @@ class Field(ABC):
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.name})"
 
-    def validate(self, value: Any) -> list[ProblemPredicate]:
+    def validate(self, value: FieldValue) -> list[ProblemPredicate]:
         return []
 
     @staticmethod
     def check_type(
-        value: Any, _type: Union[type, tuple[type, ...]], problem_type: ProblemType
+        field_value: FieldValue,
+        _type: Union[type, tuple[type, ...]],
+        problem_type: ProblemType,
     ) -> list[ProblemPredicate]:
+        value = field_value.value
         if isinstance(value, _type):
             return []
         return [
@@ -45,10 +49,11 @@ class Field(ABC):
 
 
 class NonNullMixin(Field):
-    def validate(self, value: Any) -> list[ProblemPredicate]:
-        problems = super().validate(value)
+    def validate(self, field_value: FieldValue) -> list[ProblemPredicate]:
+        problems = super().validate(field_value)
         if problems:
             return problems
+        value = field_value.value
         if value is None:
             return [ProblemPredicate(" should be non-null")]
         return []

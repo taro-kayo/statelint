@@ -1,7 +1,6 @@
-from typing import Any
-
 from ..problem import ProblemPredicate, ProblemType
 from .base import Field, NonNullMixin
+from .field_value import FieldValue
 
 
 class NullableStrField(Field):
@@ -9,10 +8,11 @@ class NullableStrField(Field):
     def problem_type(self) -> ProblemType:
         return ProblemType.STRING
 
-    def validate(self, value: Any) -> list[ProblemPredicate]:
+    def validate(self, field_value: FieldValue) -> list[ProblemPredicate]:
+        value = field_value.value
         if value is None:
             return []
-        return self.check_type(value, str, self.problem_type)
+        return self.check_type(field_value, str, self.problem_type)
 
 
 class StrField(NonNullMixin, NullableStrField):
@@ -24,8 +24,9 @@ class EnumStrField(StrField):
         super().__init__(name)
         self.choices = choices
 
-    def validate(self, value: Any) -> list[ProblemPredicate]:
-        problems = super().validate(value)
+    def validate(self, field_value: FieldValue) -> list[ProblemPredicate]:
+        problems = super().validate(field_value)
+        value = field_value.value
         str_val = "" if value is None else str(value)
         if str_val not in self.choices:
             choices = ", ".join(f'"{c}"' for c in self.choices)

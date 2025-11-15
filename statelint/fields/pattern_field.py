@@ -1,10 +1,11 @@
 import re
 from abc import ABC, abstractmethod
-from typing import Any, Callable
+from typing import Callable
 
 from ..problem import ProblemPredicate, ProblemType
 from ..utils.re_helper import is_intrinsic_invocation, is_path, is_reference_path
 from .base import NonNullMixin
+from .field_value import FieldValue
 from .str_field import NullableStrField
 
 
@@ -18,8 +19,9 @@ class PatternField(NullableStrField, ABC):
     def problem_type(self) -> ProblemType:
         pass  # pragma: no cover
 
-    def validate(self, value: Any) -> list[ProblemPredicate]:
-        problems = super().validate(value)
+    def validate(self, field_value: FieldValue) -> list[ProblemPredicate]:
+        problems = super().validate(field_value)
+        value = field_value.value
         if problems:
             return problems
         if isinstance(value, str) and not self._is_match(value):

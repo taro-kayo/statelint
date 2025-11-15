@@ -4,6 +4,7 @@ from .base import Field
 from .bool_field import BoolField as _BoolField
 from .common import QueryLanguage, StateType
 from .container import OneOfField
+from .field_value import FieldValue
 from .jsonata_field import JSONataField as _JSONataField
 from .list_field import ListField as _ListField
 from .list_field import NonEmptyListField as _NonEmptyListField
