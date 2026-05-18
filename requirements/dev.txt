@@ -6,5 +6,5 @@ flake8==7.3.0
 isort==8.0.1
 mypy==2.1.0
 
-types-python-dateutil==2.9.0.20260508
-types-PyYAML==6.0.12.20260510
+types-python-dateutil==2.9.0.20260518
+types-PyYAML==6.0.12.20260518
