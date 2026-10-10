@@ -1,10 +1,10 @@
 -r ./test.txt
 
 pre-commit==4.6.2
-black==26.5.1
+black==26.10.1
 flake8==7.4.1
 isort==9.0.2
-mypy==2.3.1
+mypy==2.4.0
 
 types-python-dateutil==2.9.0.20260807
 types-PyYAML==6.0.12.20260906
